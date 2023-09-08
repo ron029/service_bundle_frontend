@@ -71,7 +71,7 @@ export default {
         const response = await this.$apollo.mutate({
           mutation: require('@/graphql/CartHistoryCreate.gql'),
           variables: {
-            paymentOptionId: parseInt(this.cart.payment_option),
+            paymentOptionId: 1,
             firstName: this.cart.first_name,
             lastName: this.cart.last_name,
             contactNumber: this.cart.contact_number,

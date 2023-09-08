@@ -4,7 +4,7 @@
       <div class="d-flex flex-row align-items-center justify-content-center justify-content-lg-start">
         <p class="login_text lead fw-normal mb-0 me-3"></p>
       </div>
-      <form @submit.prevent="submitForm" >
+      <form @submit.prevent="submitForm">
         <div class="input-field-signin">
           <div :class="{ error: v$.services.name.$errors.length }">
             <label class="form-label">name
