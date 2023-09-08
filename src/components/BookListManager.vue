@@ -206,19 +206,24 @@ import UPDATE_STATUS_ADMIN_CART_ITEM from '@/graphql/UpdateStatusAdminCartItem.g
 export default {
   name: 'AppFooter',
   methods: {
-    async action_item(id, action) {
+    async action_item(item, action) {
+      console.log(item, action)
       let status = 0;
       if (action == 'cancelled') status = 3
       if (action == 'completed') status = 4
       const response = await this.$apollo.mutate({
         mutation: UPDATE_STATUS_ADMIN_CART_ITEM,
         variables: {
-          id: id,
+          id: parseInt(item.id),
           status: status
         }
       })
+      if (response) {
+        alert('The item id: ' + item.id + ' has been completed.' )
+        this.reloadPage()
+      }
       console.log(response)
-    }
+    },
   }
 
 }
