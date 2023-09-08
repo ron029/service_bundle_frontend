@@ -87,8 +87,8 @@
                       <td>{{ item.time }}</td>
                       <td>{{ item.status }}</td>
                       <td>
-                        <span @click="this.action_item(item.id, 'completed')" class="btn btn-success">complete</span>
-                        <span @click="this.action_item(item.id, 'cancelled')" class="btn btn-danger">cancelled</span></td>
+                        <span @click="this.action_item(item, 'completed')" class="btn btn-success">complete</span>
+                        <span @click="this.action_item(item, 'cancelled')" class="btn btn-danger">cancelled</span></td>
                     </tr>
                   </tbody>
                 </table>
