@@ -1,18 +1,33 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <AppNavbar />
+    <router-view></router-view>
+    <AppFooter />
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
+import AppNavbar from './components/AppNavbar.vue';
+import AppFooter from './components/AppFooter.vue';
+import { mapState } from 'vuex'; 
 export default {
   name: 'App',
   components: {
-    HelloWorld
-  }
+    AppNavbar,
+    AppFooter
+  },
+  data() {
+    return {
+
+    };
+  }, 
+  computed: {
+    ...mapState(['isAuthenticated']),
+  },
+
+  methods: {
+
+  },
 }
 </script>
 

@@ -1,0 +1,16 @@
+mutation create_time_slot($serviceId: ID!, $date: String!,
+$startTime: String!, $endTime: String!,
+$capacity: String!) {
+  createTimeSlot(input: {
+    serviceId: $serviceId,
+    date: $date,
+    startTime: $startTime,
+    endTime: $endTime,
+    capacity: $capacity
+  }) {
+    errors
+    timeSlot {
+      updatedAt
+    }
+  }
+}

@@ -1,0 +1,20 @@
+mutation update_service($id: ID!, $serviceCategoryId: ID!, $name: String!,
+ $price: Int!, $description: String!){
+  updateService(input: {
+    id: $id,
+    serviceCategoryId: $serviceCategoryId,
+    name: $name,
+    price: $price,
+    description: $description,
+  }) {
+    service {
+      name
+      description
+      price
+      userId {
+        firstName
+      }
+    }
+    errors
+  }
+}

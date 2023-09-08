@@ -1,0 +1,22 @@
+query admin_service($id: Int) {
+  serviceAdmin(id: $id) {
+    serviceCategoryId {
+      id
+      name
+    }
+    name
+    description
+    timeSlot {
+      date
+      startTime
+      endTime
+    }
+    id
+    price
+    serviceCategories {
+      id
+      name
+    }
+    # imageData
+  }
+}

@@ -1,0 +1,10 @@
+query total_registration {
+  totalRegistration {
+    users {
+      firstName,
+      role,
+      lastName
+    }
+    count
+  }  
+}

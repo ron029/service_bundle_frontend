@@ -1,0 +1,15 @@
+mutation update_category($id: ID!, $name: String!,
+$description: String!) {
+  updateServiceCategory(input: {
+    id: $id,
+    name: $name,
+    description: $description
+  }) {
+    serviceCategory {
+      name
+      id
+      description
+    }
+    errors
+  }
+}

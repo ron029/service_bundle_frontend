@@ -1,0 +1,7 @@
+mutation delete_service_category($id: ID!) {
+  deleteServiceCategory(input: {
+    id: $id
+  }) {
+    errors
+  }
+}

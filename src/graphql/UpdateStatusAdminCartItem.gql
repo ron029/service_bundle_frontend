@@ -1,0 +1,10 @@
+mutation updateStatusAdminCartItem($id: Int!, $status: Int!) {
+  updateStatusAdminCartItem(input: {
+    id: $id
+    status: $status
+  }) {
+    cartItem {
+      status
+    }
+  }
+}

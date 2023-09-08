@@ -1,0 +1,10 @@
+query cart_item_category {
+	pending: cartItemCategory(status: 0) {
+    service {
+      name
+    }
+    date
+    time
+    status
+  }
+}

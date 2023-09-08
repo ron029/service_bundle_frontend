@@ -1,0 +1,7 @@
+mutation delete_time_slot($id: ID!) {
+  deleteTimeSlot(input: {
+    id: $id
+  }) {
+    errors
+  }
+}

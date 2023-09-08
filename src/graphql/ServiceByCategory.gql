@@ -1,0 +1,18 @@
+query service_by_category($id: ID!) {
+  serviceByCategory(id: $id) {
+    id
+    name
+    description
+    serviceCategoryId {
+      description
+      name
+    }
+    price
+    timeSlot {
+      id
+      date
+      startTime
+      endTime
+    }
+  }
+}

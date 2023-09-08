@@ -1,0 +1,16 @@
+query admin_service {
+  serviceAdmin {
+    serviceCategoryId {
+      id
+      name
+    }
+    name
+    description
+    timeSlot {
+      date
+      startTime
+      endTime
+    }
+    id
+  }
+}

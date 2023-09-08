@@ -1,0 +1,9 @@
+query time_slot_one ($id: ID!){
+  timeSlotOne(id: $id) {
+    id
+    date
+    startTime
+    endTime
+    capacity
+  }
+}
