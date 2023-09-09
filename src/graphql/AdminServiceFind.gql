@@ -17,6 +17,7 @@ query admin_service($id: Int) {
       id
       name
     }
+    image
     # imageData
   }
 }

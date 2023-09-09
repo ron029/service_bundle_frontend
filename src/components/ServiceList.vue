@@ -11,6 +11,7 @@
                 <th>Category Name</th>
                 <th>Description</th>
                 <th>Time Slots</th>
+                <th>Image</th>
                 <th>Action</th>
               </tr>
             </thead>
@@ -32,6 +33,7 @@
                     </tr>
                   </table>
                 </td>
+                <td><img :src="item.image" :alt=item.category_name style="width: 200px; height: 150px;"></td>
                 <td>
                   <router-link :to="{ path: '/services/' + item.id + '/edit' }" class="btn btn-warning"> Edit </router-link>
                 </td>

@@ -3,6 +3,7 @@ mutation SignInUser($credentials: AUTH_PROVIDER_CREDENTIALS!) {
     token
     user {
       id
+      email
     }
     role
   }

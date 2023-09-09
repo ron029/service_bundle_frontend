@@ -1,139 +1,157 @@
 <template>
-  <div class="row d-flex justify-content-center align-items-center h-100">
-    <div class="col-md-6 col-lg-6 col-sm-6">
-      <div class="d-flex flex-row align-items-center justify-content-center justify-content-lg-start">
-        <p class="login_text lead fw-normal mb-0 me-3"></p>
-      </div>
-      <form @submit.prevent="submitForm">
-        <div class="input-field-signin">
-          <div :class="{ error: v$.services.name.$errors.length }">
-            <label class="form-label">name
-              <input v-model="services.name" class="form-control form-control-l" :class="{ error: v$.services.name.$errors.length }">
-              <div class="input-errors" v-for="error of v$.services.name.$errors" :key="error.$uid">
-                <div class="error-msg">{{ error.$message }}</div>
+  <div class="container">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col-md-6 col-lg-6 col-sm-6">
+        <div class="d-flex flex-row align-items-center justify-content-center justify-content-lg-start">
+          <p class="login_text lead fw-normal mb-0 me-3"></p>
+        </div>
+        <form @submit.prevent="submitForm" class="row">
+          <div class="col-md-6 col-lg-6">
+            <div class="input-field-signin">
+              <div :class="{ error: v$.services.name.$errors.length }">
+                <label class="form-label">Service Name
+                  <input v-model="services.name" class="form-control form-control-l" :class="{ error: v$.services.name.$errors.length }">
+                  <div class="input-errors" v-for="error of v$.services.name.$errors" :key="error.$uid">
+                    <div class="error-msg">{{ error.$message }}</div>
+                  </div>
+                </label>
               </div>
-            </label>
-          </div>
-        </div>
-        <div class="input-field-signin">
-          <div :class="{ error: v$.services.service_category.$errors.length }">
-            <label class="form-label">name
-              <select v-model="services.service_category" class="form-control form-control-l" :class="{ error: v$.services.service_category.$errors.length }">
-                <option v-for="category in this.services.service_categories" :key="category.id" :value="category.id">
-                  {{ category.name }}
-                </option>
-              </select>
-            </label>
-          </div>
-        </div>
-        <div class="input-field-signin">
-          <div :class="{ error: v$.services.description.$errors.length }">
-            <label class="form-label">description
-              <textarea v-model="services.description" class="form-control form-control-l" :class="{ error: v$.services.description.$errors.length }"></textarea>
-              <div class="input-errors" v-for="error of v$.services.description.$errors" :key="error.$uid">
-                <div class="error-msg">{{ error.$message }}</div>
+            </div>
+            <!-- Image -->
+            <div class="row input-field-signup mt-3">
+              <button id="upload_widget" @click.prevent="" class="cloudinary-button">Change Image</button>
+            </div>
+            <div class="input-field-signin">
+              <div>
+                <label class="form-label">
+                  <div id="image-preview" class="mt-3"> <!-- This is where the uploaded image will be displayed --> </div>
+                  <img v-if="show_old_image" :src="services.image" style="height:200px;, width:200p;">
+                </label>
               </div>
-            </label>
+            </div> 
           </div>
-        </div>
-        <div class="input-field-signin">
-          <div :class="{ error: v$.services.price.$errors.length }">
-            <label class="form-label">price
-              <input id="price" v-model="services.price" class="form-control form-control-l" :class="{ error: v$.services.price.$errors.length }">
-              <div class="input-errors" v-for="error of v$.services.price.$errors" :key="error.$uid">
-                <div class="error-msg">{{ error.$message }}</div>
+          <!-- Service Category -->
+          <div class="col-md-3 col-lg-6">
+            <div class="input-field-signin">
+              <div :class="{ error: v$.services.service_category.$errors.length }">
+                <label class="form-label">Service Category Name
+                  <select class="form-control form-control-l" :class="{ error: v$.services.service_category.$errors.length }">
+                    <option v-for="category in this.service_categories" :key="category.id" :value="category.id">
+                      {{ category.name }}
+                    </option>
+                  </select>
+                </label>
               </div>
-            </label>
+            </div>
+            <!-- Description -->
+            <div class="input-field-signin">
+              <div :class="{ error: v$.services.description.$errors.length }">
+                <label class="form-label">Description
+                  <textarea v-model="services.description" class="form-control form-control-l" :class="{ error: v$.services.description.$errors.length }"></textarea>
+                  <div class="input-errors" v-for="error of v$.services.description.$errors" :key="error.$uid">
+                    <div class="error-msg">{{ error.$message }}</div>
+                  </div>
+                </label>
+              </div>
+            </div>
+            <!-- Price -->
+            <div class="input-field-signin">
+              <div :class="{ error: v$.services.price.$errors.length }">
+                <label class="form-label">Price
+                  <input id="price" v-model="services.price" class="form-control form-control-l" :class="{ error: v$.services.price.$errors.length }">
+                  <div class="input-errors" v-for="error of v$.services.price.$errors" :key="error.$uid">
+                    <div class="error-msg">{{ error.$message }}</div>
+                  </div>
+                </label>
+              </div>
+            </div>
           </div>
-        </div>
-        <div class="">
           <button type="submit" class="btn btn-primary btn-lg input-field-signin">Update</button>
-        </div> 
-      </form>
-    </div>
-    <div class="col-md-6 col-lg-6 col-sm-6">
-      <span @click="new_time_slot" class="btn btn-primary">New Time Slot</span>
-      <table class="table">
-        <tr>
-          <td>Date</td>
-          <td>Start Time</td>
-          <td>End Time</td>
-          <td>Capacity</td>
-          <td>Action</td>
-        </tr>
-        <tr v-for="item in this.time_slot" :key="item.id">
-          <td>{{ item.date }}</td>
-          <td>{{ formattedStartTime(item.startTime) }}</td>
-          <td>{{ formattedStartTime(item.endTime) }}</td>
-          <td>{{ item.capacity }}</td>
-          <td>
-            <span @click="edit_time_slot(item)" class="btn btn-warning">edit</span>
-            <span @click="delete_time_slot(item)" class="btn btn-danger">Delete</span>
-          </td>
-        </tr>
-      </table>
-    </div>
-    <div class="position-relative edit-time">
-      <div v-if="showTime" class="card position-absolute top-50 start-50 translate-middle">
-        <div class="card-body">
-          <h1></h1>
-          <table class="table">
-            <tr>
-              <td>Date</td>
-              <td>Start Time</td>
-              <td>End Time</td>
-              <td>Capacity</td>
-              <td>Action</td>
-            </tr>
-            <tr v-if="delete_time">
-              <td>{{ this.time_slot_one.date }}</td>
-              <td>{{ formattedStartTime(this.time_slot_one.startTime) }}</td>
-              <td>{{ formattedStartTime(this.time_slot_one.endTime) }}</td>
-              <td>{{ this.time_slot_one.capacity }}</td>
-              <td><span @click="this.delete_time_save" class="btn btn-danger">Delete</span></td>
-            </tr>
-            <tr v-if="edit_time">
-              <td> <input type="date" v-model="time_slot_one.date"> </td> 
-              <td>
-                {{ formattedStartTime(this.time_slot_one.startTime) }}<br>
-                <input type="time" v-model="time_slot_one.startTime">
-              </td>
-              <td>
-                {{ formattedStartTime(this.time_slot_one.endTime) }}<br>
-                <input type="time" v-model="time_slot_one.endTime">
-              </td>
-              <td>
-                {{ this.time_slot_one.capacity }}<br>
-                <input type="number" v-model="time_slot_one.capacity">
-              </td>
-              <td><span @click="this.edit_time_save" class="btn btn-warning">edit</span></td>
-            </tr>
-          </table>
+        </form>
+      </div>
+      <div class="col-md-6 col-lg-6 col-sm-6">
+        <span @click="new_time_slot" class="btn btn-primary">New Time Slot</span>
+        <table class="table">
+          <tr>
+            <td>Date</td>
+            <td>Start Time</td>
+            <td>End Time</td>
+            <td>Capacity</td>
+            <td>Action</td>
+          </tr>
+          <tr v-for="item in this.time_slot" :key="item.id">
+            <td>{{ item.date }}</td>
+            <td>{{ formattedStartTime(item.startTime) }}</td>
+            <td>{{ formattedStartTime(item.endTime) }}</td>
+            <td>{{ item.capacity }}</td>
+            <td>
+              <span @click="edit_time_slot(item)" class="btn btn-warning">edit</span>
+              <span @click="delete_time_slot(item)" class="btn btn-danger">Delete</span>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="position-relative edit-time">
+        <div v-if="showTime" class="card position-absolute top-50 start-50 translate-middle">
+          <div class="card-body">
+            <h1></h1>
+            <table class="table">
+              <tr>
+                <td>Date</td>
+                <td>Start Time</td>
+                <td>End Time</td>
+                <td>Capacity</td>
+                <td>Action</td>
+              </tr>
+              <tr v-if="delete_time">
+                <td>{{ this.time_slot_one.date }}</td>
+                <td>{{ formattedStartTime(this.time_slot_one.startTime) }}</td>
+                <td>{{ formattedStartTime(this.time_slot_one.endTime) }}</td>
+                <td>{{ this.time_slot_one.capacity }}</td>
+                <td><span @click="this.delete_time_save" class="btn btn-danger">Delete</span></td>
+              </tr>
+              <tr v-if="edit_time">
+                <td> <input type="date" v-model="time_slot_one.date"> </td> 
+                <td>
+                  {{ formattedStartTime(this.time_slot_one.startTime) }}<br>
+                  <input type="time" v-model="time_slot_one.startTime">
+                </td>
+                <td>
+                  {{ formattedStartTime(this.time_slot_one.endTime) }}<br>
+                  <input type="time" v-model="time_slot_one.endTime">
+                </td>
+                <td>
+                  {{ this.time_slot_one.capacity }}<br>
+                  <input type="number" v-model="time_slot_one.capacity">
+                </td>
+                <td><span @click="this.edit_time_save" class="btn btn-warning">edit</span></td>
+              </tr>
+            </table>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="position-relative edit-time">
-      <div v-if="createTimeSlot" class="card position-absolute top-50 start-50 translate-middle">
-        <div class="card-body">
-          <h1></h1>
-          please ensure the date is now or in the future<br>
-          please ensure the before and after of time, or else it wont save!
-          <table class="table">
-            <tr>
-              <td>Date</td>
-              <td>Start Time</td>
-              <td>End Time</td>
-              <td>Capacity</td>
-              <td>Action</td>
-            </tr>
-            <tr>
-              <td> <input type="date" v-model="newts.date"> </td>
-              <td> <input type="time" v-model="newts.start_time"> </td>
-              <td> <input type="time" v-model="newts.end_time"> </td>
-              <td> <input type="number" v-model="newts.capacity"> </td>
-              <td><span @click="this.create_time_slot" class="btn btn-success">Create</span></td>
-            </tr>
-          </table>
+      <div class="position-relative edit-time">
+        <div v-if="createTimeSlot" class="card position-absolute top-50 start-50 translate-middle">
+          <div class="card-body">
+            <p>please ensure the date is now or in the future</p>
+            <p>please ensure the before and after of time, or else it wont save!</p>
+            <table class="table">
+              <tr>
+                <td>Date</td>
+                <td>Start Time</td>
+                <td>End Time</td>
+                <td>Capacity</td>
+                <td>Action</td>
+              </tr>
+              <tr>
+                <td> <input type="date" v-model="newts.date"> </td>
+                <td> <input type="time" v-model="newts.start_time"> </td>
+                <td> <input type="time" v-model="newts.end_time"> </td>
+                <td> <input type="number" v-model="newts.capacity"> </td>
+                <td><span @click="this.create_time_slot" class="btn btn-success">Create</span></td>
+              </tr>
+            </table>
+          </div>
         </div>
       </div>
     </div>
@@ -141,24 +159,22 @@
 </template>
 
 <script>
-import { required, integer } from '@vuelidate/validators'
-import updateService from '@/graphql/ServiceUpdate.gql';
+import { required, integer } from '@vuelidate/validators';
 import { useVuelidate } from '@vuelidate/core';
-import serviceAdmin from '@/graphql/AdminServiceFind.gql';
 export default {
   name: 'ServiceEdit',
     setup () { return { v$: useVuelidate() } },
     data () {
     return {
       services: {
-        id: '',
         service_category: '',
         name: '',
         price: '',
         description: '',
-        image_data: '',
-        service_categories: [],
       },
+      id: '',
+      image: '',
+      service_categories: [],
       time_slot: [],
       time_slot_one: [],
       showTime: false,
@@ -177,7 +193,8 @@ export default {
         end_time: '',
         date: '',
         capacity: ''
-      }
+      },
+      show_old_image: true,
     }
   },
   validations () {
@@ -187,11 +204,38 @@ export default {
         service_category: { required  },
         price: {required, integer },
         description: {required},
-        service_categories: {required}
       }
     }
   },
   methods: {
+    upload(){
+        console.log('upload')
+        var myWidget = window.cloudinary.createUploadWidget({
+            cloudName: 'dovxq5gn9', 
+            processQueue: false,
+            uploadPreset: 'uhjevesg'}, (error, result) => {
+                if (!error && result && result.event === "success") { 
+                console.log('Done! Here is the image info: ', result.info); 
+                    const imageUrl = result.info.secure_url;
+                    this.services.image = imageUrl;
+                    this.displayImage(imageUrl);
+                }
+            }
+        )
+        document.getElementById("upload_widget").addEventListener("click", function(){
+            myWidget.open();
+        }, false);  
+    }, 
+    // Function to display the uploaded image
+    displayImage(imageUrl) {
+        this.show_old_image = false;
+        const imagePreviewDiv = document.getElementById('image-preview');
+        const image = document.createElement('img');
+        image.src = imageUrl;
+        image.classList.add('uploaded-image'); // Add CSS class for styling
+        imagePreviewDiv.innerHTML = ''; // Clear any existing content
+        imagePreviewDiv.appendChild(image);
+    },
     new_time_slot(){
       this.createTimeSlot = true
     },
@@ -274,44 +318,48 @@ export default {
       this.showTime = true;
     },
     async submitForm() {
+      console.log('service_categories: ', this.service_categories)
+      console.log("errors: ", this.v$)
       this.v$.$touch();
-      if (!isNaN(this.services.price)) this.services.price = parseFloat(this.services.price)
-      console.log(typeof this.services.price)
       if (!this.v$.$error) {
-        try {
-          const response = await this.$apollo.mutate({
-            mutation: updateService,
-            variables: {
-              id: this.services.id,
-              serviceCategoryId: this.services.service_category,
-              name: this.services.name,
-              description: this.services.description,
-              price: this.services.price
-            },
-          });
-          console.log(response)
-          if (response) { alert ('YOUR PRODUCT HAS BEEN UPDATED')}
-          console.log(response.data.updateService.errors.length)
-          if (response.data.updateService.errors.length < 1) this.$router.push('/services');
-          // Handle the response here, e.g., display success message or update UI.
-        } catch (error) {
-          console.error('Error in update_service:', error);
-          // Handle the error here, e.g., show an error message to the user.
-        }
+        console.log(this.services.image)
+        const response = await this.$apollo.mutate({
+          mutation: required('@/graphql/ServiceUpdate.gql'),
+          variables: {
+            id: this.services.id,
+            serviceCategoryId: parseInt(this.services.new_service_cat),
+            name: this.services.name,
+            description: this.services.description,
+            price: parseFloat(this.services.price),
+            image: this.services.image,
+          },
+        });
+        console.log(response)
+        if (response) { alert ('YOUR PRODUCT HAS BEEN UPDATED')}
+        console.log(response.data.updateService.errors.length)
+        if (response.data.updateService.errors.length < 1) this.$router.push('/services');
+        // Handle the response here, e.g., display success message or update UI.
+      } else {
+        console.log('An error occured')
       }
     },
     async show_service(id) {
       const new_id = parseInt(id);
       const response = await this.$apollo.query({
-        query: serviceAdmin,
+        query: require('@/graphql/AdminServiceFind.gql'),
         variables: { "id": new_id }
       });
-      this.services.id = response.data.serviceAdmin[0].id;
+      console.log('', response)
+      this.id = response.data.serviceAdmin[0].id;
+      this.image = response.data.serviceAdmin[0].image;
+      this.service_categories = response.data.serviceAdmin[0].serviceCategories;
+      
       this.services.name = response.data.serviceAdmin[0].name;
       this.services.price = response.data.serviceAdmin[0].price;
       this.services.description = response.data.serviceAdmin[0].description;
-      this.services.service_categories = response.data.serviceAdmin[0].serviceCategories;
       this.services.service_category = response.data.serviceAdmin[0].serviceCategoryId.name;
+      this.services.new_service_cat = this.services.service_category;
+      console.log('image from adminservicefind',this.services.service_category)
     },
     async show_time_slot() { },
     async show_time_slot_one(id) {
@@ -357,12 +405,37 @@ export default {
     this.time_slot
     this.show_service(this.$route.params.id);
     this.show_time_slot(this.$route.params.id);
-    this.show_time_slot_by_service(this.$route.params.id)
+    this.show_time_slot_by_service(this.$route.params.id);
+    this.upload();
   }
 }
 </script>
 
 <style>
+.cloudinary-button {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+}
+.cloudinary-button:hover {
+    background-color: #0056b3;
+}
+/* Style the uploaded image */
+.uploaded-image {
+    max-width: 100%;
+    height: auto;
+    margin-top: 10px;
+    border: 1px solid #ccc;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.link_text {
+    display: inline-block;
+}
+.form-service-edit {
+  display: inline-block;
+}
 .edit-time {
   margin-top: -390px;
 }

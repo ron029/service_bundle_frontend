@@ -1,5 +1,8 @@
 mutation SignupMutation($signupInput: CreateUserInput!) {
   createUser(input: $signupInput) {
     errors
+    user {
+      email
+    }
   }
 }

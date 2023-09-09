@@ -1,11 +1,12 @@
 mutation update_service($id: ID!, $serviceCategoryId: ID!, $name: String!,
- $price: Int!, $description: String!){
+ $price: Int!, $description: String!, $image: String!){
   updateService(input: {
     id: $id,
     serviceCategoryId: $serviceCategoryId,
     name: $name,
     price: $price,
     description: $description,
+    image: $image
   }) {
     service {
       name

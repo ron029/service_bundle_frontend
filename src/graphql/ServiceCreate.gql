@@ -1,10 +1,11 @@
 mutation create_service($serviceCategoryId: ID!, $name: String!,
-$description: String!, $price: Int!) {
+$description: String!, $price: Int!, $image: String!) {
   createService(input: {
     serviceCategoryId: $serviceCategoryId,
     name: $name,
     description: $description,
-    price: $price
+    price: $price,
+    image: $image
   }) {
     service {
       name
