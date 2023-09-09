@@ -28,22 +28,25 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="item in history" :key="item.id">
-              <td>{{ item.id }}</td>
-              <td>{{ item.bookingId }}</td>
-              <td>{{ item.cartDate }}</td>
-              <td>{{ item.serviceCategories }}</td>
-              <td>{{ item.services }}</td>
-              <td>{{ item.nameOfCustomer }}</td>
-              <td>{{ item.date }}</td>
-              <td>{{ item.time }}</td>
-              <td>{{ item.amount }}</td>
-              <td>{{ getStatusLabel(item) }}</td>
-              <td>
-                <span @click="action_item(item, 'COMPLETED')" class="btn btn-success">Completed</span>
-                <span @click="action_item(item, 'CANCELLED')" class="btn btn-danger">Cancelled</span>
-              </td>
-            </tr>
+            <template v-if="history">
+              <tr v-for="item in history" :key="item.id">
+                <td>{{ item.id }}</td>
+                <td>{{ item.bookingId }}</td>
+                <td>{{ item.cartDate }}</td>
+                <td>{{ item.serviceCategories }}</td>
+                <td>{{ item.services }}</td>
+                <td>{{ item.nameOfCustomer }}</td>
+                <td>{{ item.date }}</td>
+                <td>{{ item.time }}</td>
+                <td>{{ item.amount }}</td>
+                <td>{{ getStatusLabel(item) }}</td>
+                <td>
+                  <button :disabled="parseInt(item.status)!==1 && parseInt(item.status)!==0" @click="action_item(item, 'completed')" class="btn btn-success">complete</button>
+                  <button :disabled="parseInt(item.status)!==1 && parseInt(item.status)!==0" @click="action_item(item, 'cancelled')" class="btn btn-danger">cancelled</button>
+                </td>
+              </tr>
+            </template>
+            <template v-else><tr><td colspan="11">No items available.</td></tr></template>
           </tbody>
         </table>
       </div>
@@ -95,8 +98,8 @@ export default {
     async action_item(item, action) {
       console.log(item, action)
       let status = 0;
-      if (action == 'CANCELLED') status = 3
-      if (action == 'COMPLETED') status = 4
+      if (action == 'cancelled') status = 3
+      if (action == 'completed') status = 4
       const response = await this.$apollo.mutate({
         mutation: require('@/graphql/UpdateStatusAdminCartItem.gql'),
         variables: {
@@ -135,7 +138,6 @@ export default {
     this.booking_details()
   }
 }
-console.log('ok')
 </script>
 
 <style>

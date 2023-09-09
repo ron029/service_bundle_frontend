@@ -70,7 +70,7 @@
                       <th>date</th>
                       <th>time</th>
                       <th>status</th>
-                      <th>action</th>
+                      <th v-if="get_role !== 'manager'">action</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -82,9 +82,10 @@
                       <td>{{ item.date }}</td>
                       <td>{{ item.time }}</td>
                       <td>{{ item.status }}</td>
-                      <td>
+                      <td v-if="this.get_role() != 'manager'">
                         <span @click="action_item(item, 'completed')" class="btn btn-success">complete</span>
-                        <span @click="action_item(item, 'cancelled')" class="btn btn-danger">cancelled</span></td>
+                        <span @click="action_item(item, 'cancelled')" class="btn btn-danger">cancelled</span>
+                      </td>
                     </tr>
                   </tbody>
                 </table>
@@ -151,15 +152,18 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr v-for="item in data.adminCartItem" :key="item.id">
-                      <td>{{ item.id }}</td>
-                      <td>{{ item.serviceName }}</td>
-                      <td>{{ item.userName }}</td>
-                      <td>{{ item.userLastname }}</td>
-                      <td>{{ item.date }}</td>
-                      <td>{{ item.time }}</td>
-                      <td>{{ item.status }}</td>
-                    </tr>
+                    <template v-if="data.adminCartItem">
+                      <tr v-for="item in data.adminCartItem" :key="item.id">
+                        <td>{{ item.id }}</td>
+                        <td>{{ item.serviceName }}</td>
+                        <td>{{ item.userName }}</td>
+                        <td>{{ item.userLastname }}</td>
+                        <td>{{ item.date }}</td>
+                        <td>{{ item.time }}</td>
+                        <td>{{ item.status }}</td>
+                      </tr>
+                    </template>
+                    <template v-else><tr><td colspan="7">No items available.</td></tr></template>
                   </tbody>
                 </table>
               </div>
@@ -199,9 +203,22 @@
 
 <script>
 import UPDATE_STATUS_ADMIN_CART_ITEM from '@/graphql/UpdateStatusAdminCartItem.gql';
+import { mapState } from 'vuex';
 export default {
-  name: 'AppFooter',
+  name: 'BookList',
+  computed: {
+    ...mapState(['userRole']),
+  },
+  mounted(){
+    console.log('oksdf')
+      console.log(this.get_role());
+    },  
   methods: {
+    get_role() {
+      const userRole = localStorage.getItem('userRole');
+      console.log('asdfasdf', userRole);
+      return userRole;
+    },
     async action_item(item, action) {
       console.log(item, action)
       let status = 0;
@@ -224,10 +241,10 @@ export default {
       // Reload the current page
       window.location.reload();
     },
-  },
+  }
   
-
 }
+console.log('asdf')
 </script>
 
 <style>

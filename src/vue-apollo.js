@@ -10,8 +10,8 @@ Vue.use(VueApollo)
 const AUTH_TOKEN = 'apollo-token'
 
 // Http endpoint
-const httpEndpoint = process.env.VUE_APP_GRAPHQL_HTTP || 'https://service-bundle.onrender.com/api/v1/graphql'
-// const httpEndpoint = process.env.VUE_APP_GRAPHQL_HTTP || 'http://localhost:3000/api/v1/graphql'
+// const httpEndpoint = process.env.VUE_APP_GRAPHQL_HTTP || 'https://service-bundle.onrender.com/api/v1/graphql'
+const httpEndpoint = process.env.VUE_APP_GRAPHQL_HTTP || 'http://localhost:3000/api/v1/graphql'
 
 // an extension of the Apollo Client for handling file uploads in GraphQL
 // const httpLink = createUploadLink({ uri: 'http://localhost:3000/api/v1/graphql' })
