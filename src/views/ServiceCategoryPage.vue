@@ -134,13 +134,20 @@ export default {
     async show_categories() {
       try {
         const response = await this.$apollo.query({
-          query: require('@/graphql/Categories.gql')
+          query: `
+            query categories {
+              categories {
+                id
+                name
+                image
+                description
+              }
+            }
+          `,
         });
-        console.log('RESPONSE FROM CATEGORY', response)
         this.services.service_categories = response.data.categories;
-        console.log('the category object is here', this.services.service_categories)
       } catch (error) {
-          console.error('Error logging out:', error);
+        console.error('Error logging out:', error);
       }
     },
     async update_service_category() {
