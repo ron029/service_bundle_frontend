@@ -30,7 +30,7 @@ export default {
     async get_service_categories() {
       try {
         const response = await this.$apollo.query({
-          query: require('@/graphql/Categories.gql'),
+          query: require('@/graphql/Category.gql'),
         });
         this.service_categories = response.data.categories;
       } catch (error) { 

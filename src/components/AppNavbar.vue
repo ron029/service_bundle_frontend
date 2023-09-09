@@ -109,7 +109,7 @@ export default {
         async logout() {
             try {
                 await this.$apollo.mutate({
-                    mutation: logout
+                    mutation: logout,
                 });
                 await onLogout(createProvider);
                 this.setAuthenticated(false);
