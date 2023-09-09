@@ -2,7 +2,7 @@ import Vue from 'vue'
 import VueApollo from 'vue-apollo'
 import { createApolloClient, restartWebsockets } from 'vue-cli-plugin-apollo/graphql-client'
 // import { createUploadLink } from 'apollo-upload-client';
-// import { InMemoryCache } from 'apollo-cache-inmemory';
+import { InMemoryCache } from 'apollo-cache-inmemory';
 // Install the vue plugin
 Vue.use(VueApollo)
 
@@ -43,7 +43,7 @@ const defaultOptions = {
   // httpLinkOptions property of defaultOptions.
   // link: myLink
   // link: httpLink,
-
+  cache: new InMemoryCache(),
   // Override default cache
   // cache: new InMemoryCache(),
 
@@ -55,6 +55,7 @@ const defaultOptions = {
 
   // Client local data (see apollo-link-state)
   // clientState: { resolvers: { ... }, defaults: { ... } }
+
 }
 
 // Call this in the Vue app file
@@ -71,6 +72,8 @@ export function createProvider (options = {}) {
     defaultClient: apolloClient,
     defaultOptions: {
       $query: {
+
+        fetchOptions: { credentials: 'include'}
         // fetchPolicy: 'cache-and-network',
       },
     },
