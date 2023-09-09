@@ -146,6 +146,7 @@ export default {
   },
   mounted() {
     this.show_categories()
+    this.upload()
   },
 
 }
