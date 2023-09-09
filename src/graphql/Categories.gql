@@ -1,8 +1,8 @@
-query category {
+query Categories {
   categories{
     id
     name
-    description
     image
+    description
   }
 }

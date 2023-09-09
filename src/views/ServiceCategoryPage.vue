@@ -136,6 +136,7 @@ export default {
         const response = await this.$apollo.query({
           query: require('@/graphql/Categories.gql'),
         });
+        console.log('RESPONSE FROM CATEGORY', response)
         this.services.service_categories = response.data.categories;
         console.log('the category object is here', this.services.service_categories)
       } catch (error) {
