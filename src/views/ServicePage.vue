@@ -1,14 +1,12 @@
 <template>
-  <div class="">
+  <div class="container">
     <div v-if="userRole === 'admin'">
-      <router-link to="/services/new">New</router-link>
       <ServiceList />
     </div>
     <div v-if="userRole === 'customer'">
       <ServiceListCustomer />
     </div>
     <div v-if="userRole === 'manager'">
-      <router-link to="/services/new">New</router-link>
       <ServiceList />
     </div>
   </div>

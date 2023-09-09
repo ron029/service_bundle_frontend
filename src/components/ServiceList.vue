@@ -1,6 +1,7 @@
 <template>
   <div>
     <h2>Services</h2>
+    <router-link to="/services/new" class="btn btn-primary">New</router-link>
     <ApolloQuery :query="require('@/graphql/AdminService.gql')">
       <template v-slot="{ result: { data, loading } }">
         <div v-if="loading">Loading...</div>

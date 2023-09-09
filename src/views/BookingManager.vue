@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container">
     <h1>Booking History</h1>
     <ul class="nav nav-tabs" id="myTab" role="tablist">
       <li class="nav-item" role="presentation">

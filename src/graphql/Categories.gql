@@ -3,5 +3,6 @@ query category {
     id
     name
     description
+    image
   }
 }

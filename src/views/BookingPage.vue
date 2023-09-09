@@ -1,5 +1,5 @@
 <template>
-  <div class="">
+  <div class="container">
       <h2>Bookings</h2>
       <BookList v-if="userRole === 'admin'"/>
       <BookListManager v-if="userRole === 'manager'"/>

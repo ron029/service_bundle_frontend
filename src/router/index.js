@@ -55,7 +55,6 @@ const routes = [
     component: TimeSlotDetails,
     props: true
   }
-  
 ];
 
 const router = new VueRouter({

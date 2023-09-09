@@ -1,10 +1,10 @@
 <template>
-  <div>
+  <div class="container">
     <h1>New Service</h1>
-    <form @submit.prevent="submitForm">
+    <form @submit.prevent="submitForm" class="centered-form">
       <div class="input-field-signin">
         <div :class="{ error: v$.services.name.$errors.length }">
-          <label class="form-label">services name
+          <label class="form-label">Service Name
             <input v-model="services.name" class="form-control form-control-l" :class="{ error: v$.services.name.$errors.length }">
             <div class="input-errors" v-for="error of v$.services.name.$errors" :key="error.$uid">
               <div class="error-msg">{{ error.$message }}</div>
@@ -12,7 +12,7 @@
           </label>
         </div>
       </div>
-      <div class="input-field-signin">
+      <div class="input-field-signin">Service Category
         <div :class="{ error: v$.services.service_category.$errors.length }">
           <select v-model="services.service_category" class="form-control form-control-l" :class="{ error: v$.services.service_category.$errors.length }">
             <option v-for="category in this.services.service_categories" :key="category.id" :value="category.id">
@@ -23,7 +23,7 @@
       </div>
       <div class="input-field-signin">
         <div :class="{ error: v$.services.description.$errors.length }">
-          <label class="form-label">description
+          <label class="form-label">Description
             <textarea v-model="services.description" class="form-control form-control-l" :class="{ error: v$.services.description.$errors.length }"></textarea>
             <div class="input-errors" v-for="error of v$.services.description.$errors" :key="error.$uid">
               <div class="error-msg">{{ error.$message }}</div>
@@ -33,7 +33,7 @@
       </div>
       <div class="input-field-signin">
         <div :class="{ error: v$.services.price.$errors.length }">
-          <label class="form-label">price
+          <label class="form-label">Price
             <input id="price" v-model="services.price" class="form-control form-control-l" :class="{ error: v$.services.price.$errors.length }">
             <div class="input-errors" v-for="error of v$.services.price.$errors" :key="error.$uid">
               <div class="error-msg">{{ error.$message }}</div>
@@ -47,7 +47,7 @@
         </div>
         <div id="image-preview" class="mt-3"></div>
         <button type="submit" class="btn btn-primary btn-lg input-field-signin">Create</button>
-      </div> 
+      </div>
     </form>
   </div>
 </template>
@@ -133,13 +133,16 @@ export default {
             image: this.image
           },
         });
-        if(response) {
-          alert("SUCCESS, new service has been recorded")
-        }
+        if(response) { alert("SUCCESS, new service has been recorded") }
+        this.reloadPage()
         this.time_slot_one = null;
         } catch (error) { console.error("Graphql Error:", error); }
       }
-    }
+    },
+    reloadPage() {
+      // Reload the current page
+      window.location.reload();
+    },
   },
   components: {
 
@@ -153,5 +156,26 @@ export default {
 </script>
 
 <style>
-
+.centered-form {
+  width: 230px;
+  margin: 0 auto;
+}
+.cloudinary-button {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+}
+.cloudinary-button:hover {
+    background-color: #0056b3;
+}
+/* Style the uploaded image */
+.uploaded-image {
+    max-width: 100%;
+    height: auto;
+    margin-top: 10px;
+    border: 1px solid #ccc;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
 </style>

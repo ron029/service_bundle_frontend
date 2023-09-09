@@ -1,9 +1,10 @@
 mutation update_category($id: ID!, $name: String!,
-$description: String!) {
+$description: String!, $image: String) {
   updateServiceCategory(input: {
     id: $id,
     name: $name,
-    description: $description
+    description: $description,
+    image: $image
   }) {
     serviceCategory {
       name

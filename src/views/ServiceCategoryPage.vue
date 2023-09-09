@@ -2,7 +2,7 @@
   <div class="container">
     <h2>Service Category</h2>
     <div class="">
-      <span @click="toggleUpdateServiceCategory" class="btn btn-primary">New Service Category</span>
+      <!-- <span @click="toggleUpdateServiceCategory" class="btn btn-primary">New Service Category</span> -->
       <div v-if="UpdateServiceCategory" class="card">
         <div class="card-body">
           <table class="table">
@@ -22,8 +22,9 @@
                 <td>
                   <input v-model="update.description"> 
                 </td>
-                <td> <input type="file" ></td>
+                <td><button id="upload_widget" @click.prevent="" class="cloudinary-button">Upload files</button></td>
                 <td>
+                  
                   <span @click="this.create_service_category" v-if="createNewServiceCategory" class="btn btn-success">CREATE</span>
                   <span @click="this.update_service_category" v-if="updateNewServiceCategory" class="btn btn-warning">SUBMIT</span>
                 </td>
@@ -46,7 +47,7 @@
         <tr v-for="item in this.services.service_categories" :key="item.id">
           <td>{{ item.name }}</td>
           <td>{{ item.description }}</td>
-          <td>Img</td>
+          <td><img :src="item.image" style="width: 200px; height: 150px;"></td>
           <td>
             <span @click="show_category_one(item)" class="btn btn-warning">edit</span><br>
             <span @click="delete_category(item)" class="btn btn-danger">delete</span>
@@ -64,20 +65,48 @@ export default {
         services: {
           service_categories: null
         },
-        UpdateServiceCategory: false,
+        UpdateServiceCategory: true,
         update: {
           name: '',
           description: '',
-          id: ''
+          id: '',
+          image: ''
         },
-        createNewServiceCategory: false,
+        createNewServiceCategory: true,
         updateNewServiceCategory: false,
       }
   },
   props: ['serviceCategoryId'],
   name: 'ServiceCategoryPage',
   methods: {
-    
+    upload(){
+        console.log('upload')
+        var myWidget = window.cloudinary.createUploadWidget({
+            cloudName: 'dovxq5gn9', 
+            processQueue: false,
+            uploadPreset: 'uhjevesg'}, (error, result) => {
+                if (!error && result && result.event === "success") {
+                console.log('Done! Here is the image info: ', result.info); 
+                    const imageUrl = result.info.secure_url;
+                    this.update.image = imageUrl;
+                    // this.displayImage(imageUrl);
+                }
+            }
+        )
+        document.getElementById("upload_widget").addEventListener("click", function(){
+            myWidget.open();
+        }, false);  
+    }, 
+    // Function to display the uploaded image
+    // displayImage(imageUrl) {
+    //     this.show_old_image = false;
+    //     const imagePreviewDiv = document.getElementById('image-preview');
+    //     const image = document.createElement('img');
+    //     image.src = imageUrl;
+    //     image.classList.add('uploaded-image'); // Add CSS class for styling
+    //     imagePreviewDiv.innerHTML = ''; // Clear any existing content
+    //     imagePreviewDiv.appendChild(image);
+    // },
     toggleUpdateServiceCategory(){
       if (this.UpdateServiceCategory == false) this.UpdateServiceCategory = true;
 
@@ -91,6 +120,7 @@ export default {
           variables: {
             "name": this.update.name,
             "description": this.update.description,
+            "image": this.update.image
           },
         });
         if (response) {
@@ -118,7 +148,8 @@ export default {
           variables: {
             "id": parseInt(this.update.id),
             "name": this.update.name,
-            "description": this.update.description
+            "description": this.update.description,
+            "image": this.update.image
           },
         });
         if (response) {
@@ -142,6 +173,7 @@ export default {
         this.update.description = response.data.serviceCategory[0].description
         this.update.id = response.data.serviceCategory[0].id
         this.UpdateServiceCategory = true;
+        this.update.image = response.data.serviceCategory[0].image
         console.log('File to edit', this.update)
       } catch (error) { console.error("Graphql Error:", error); }
     },
@@ -169,11 +201,33 @@ export default {
   },
   mounted(){
     this.show_categories();
+    this.upload()
   }
 }
 </script>
 
 <style>
+.cloudinary-button {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+}
+.cloudinary-button:hover {
+    background-color: #0056b3;
+}
+/* Style the uploaded image */
+.uploaded-image {
+    max-width: 100%;
+    height: auto;
+    margin-top: 10px;
+    border: 1px solid #ccc;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.link_text {
+    display: inline-block;
+}
 .edit-time {
   margin-top: -100px;
 }

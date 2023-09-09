@@ -3,5 +3,6 @@ query service_category($id: ID!) {
     name
     id
     description
+    image
   }
 }

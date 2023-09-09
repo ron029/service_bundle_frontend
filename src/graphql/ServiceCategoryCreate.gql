@@ -1,7 +1,8 @@
-mutation create_service_category($name: String!, $description: String!){
+mutation create_service_category($name: String!, $description: String!, $image: String!){
   createServiceCategory(input: {
     name: $name,
-    description: $description
+    description: $description,
+    image: $image
   }) {
     serviceCategory {
       name

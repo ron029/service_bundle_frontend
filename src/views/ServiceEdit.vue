@@ -25,7 +25,8 @@
               <div>
                 <label class="form-label">
                   <div id="image-preview" class="mt-3"> <!-- This is where the uploaded image will be displayed --> </div>
-                  <img v-if="show_old_image" :src="services.image" style="height:200px;, width:200p;">
+                  <img v-if="show_old_image" :src="services.image" style="height:200px; width:200px;">
+
                 </label>
               </div>
             </div> 
@@ -204,7 +205,7 @@ export default {
         service_category: { required  },
         price: {required, integer },
         description: {required},
-        service_categories: {required}
+        service_categories: {required},
       }
     }
   },
