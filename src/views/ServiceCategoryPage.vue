@@ -118,16 +118,18 @@ export default {
         const response = await this.$apollo.mutate({
           mutation: require('@/graphql/ServiceCategoryCreate.gql'),
           variables: {
-            "name": this.update.name,
-            "description": this.update.description,
-            "image": this.update.image
+            name: this.update.name,
+            description: this.update.description,
+            image: this.update.image
           },
         });
         if (response) {
-          alert('NEW CATEGORY HAS BEEN ADDED')
-          this.reloadPage()
+          alert('NEW CATEGORY HAS BEEN ADDED');
+          this.reloadPage();
         }
-      } catch (error) { console.error("Graphql Error:", error); }
+      } catch (error) {
+        console.error('GraphQL Error:', error);
+      }
     },
     async show_categories() {
       try {
