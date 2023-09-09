@@ -2,7 +2,7 @@ import Vue from 'vue'
 import VueApollo from 'vue-apollo'
 import { createApolloClient, restartWebsockets } from 'vue-cli-plugin-apollo/graphql-client'
 // import { createUploadLink } from 'apollo-upload-client';
-import { InMemoryCache } from 'apollo-cache-inmemory';
+// import { InMemoryCache } from 'apollo-cache-inmemory';
 // Install the vue plugin
 Vue.use(VueApollo)
 
@@ -10,8 +10,8 @@ Vue.use(VueApollo)
 const AUTH_TOKEN = 'apollo-token'
 
 // Http endpoint
-const httpEndpoint = process.env.VUE_APP_GRAPHQL_HTTP || 'https://service-bundle.onrender.com/api/v1/graphql'
-// const httpEndpoint = process.env.VUE_APP_GRAPHQL_HTTP || 'http://localhost:3000/api/v1/graphql'
+// const httpEndpoint = process.env.VUE_APP_GRAPHQL_HTTP || 'https://service-bundle.onrender.com/api/v1/graphql'
+const httpEndpoint = process.env.VUE_APP_GRAPHQL_HTTP || 'http://localhost:3000/api/v1/graphql'
 
 // an extension of the Apollo Client for handling file uploads in GraphQL
 // const httpLink = createUploadLink({ uri: 'http://localhost:3000/api/v1/graphql' })
@@ -45,7 +45,7 @@ const defaultOptions = {
   // link: httpLink,
 
   // Override default cache
-  cache: new InMemoryCache(),
+  // cache: new InMemoryCache(),
 
   // Override the way the Authorization header is set
   // getAuth: (tokenName) => ...
