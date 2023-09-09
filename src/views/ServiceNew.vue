@@ -41,9 +41,12 @@
           </label>
         </div>
       </div>
-      <div class="text-right text-lg-start mt-4 pt-2">
-                  <!-- <button type="submit" class="btn btn-primary btn-lg input-field-signin">Update Details</button> -->
-          <button type="submit" class="btn btn-primary btn-lg input-field-signin">Create</button>
+      <div class="input-field-signin">
+        <div class="row input-field-signup mt-3">
+          <button id="upload_widget" @click.prevent="" class="cloudinary-button">Upload files</button>
+        </div>
+        <div id="image-preview" class="mt-3"></div>
+        <button type="submit" class="btn btn-primary btn-lg input-field-signin">Create</button>
       </div> 
     </form>
   </div>
@@ -61,7 +64,7 @@ export default {
         name: '',
         price: '',
         description: '',
-        service_categories: []
+        service_categories: [],
       },
     }
   },
@@ -72,10 +75,38 @@ export default {
         service_category: { required  },
         price: {required, integer },
         description: {required},
-      }
+      },
+      image: '',
     }
   },
   methods: {
+    upload(){
+        console.log('upload')
+        var myWidget = window.cloudinary.createUploadWidget({
+            cloudName: 'dovxq5gn9', 
+            processQueue: false,
+            uploadPreset: 'uhjevesg'}, (error, result) => { 
+                if (!error && result && result.event === "success") { 
+                console.log('Done! Here is the image info: ', result.info); 
+                    const imageUrl = result.info.secure_url;
+                    this.image = imageUrl;
+                    this.displayImage(imageUrl);
+                }
+            }
+        )
+        document.getElementById("upload_widget").addEventListener("click", function(){
+            myWidget.open();
+        }, false);  
+    }, 
+        // Function to display the uploaded image
+    displayImage(imageUrl) {
+        const imagePreviewDiv = document.getElementById('image-preview');
+        const image = document.createElement('img');
+        image.src = imageUrl;
+        image.classList.add('uploaded-image'); // Add CSS class for styling
+        imagePreviewDiv.innerHTML = ''; // Clear any existing content
+        imagePreviewDiv.appendChild(image);
+    },
     async show_categories() {
       try {
         const response = await this.$apollo.query({
@@ -98,7 +129,8 @@ export default {
             serviceCategoryId: this.services.service_category,
             name: this.services.name,
             description: this.services.description,
-            price: parseInt(this.services.price)
+            price: parseInt(this.services.price),
+            image: this.image
           },
         });
         if(response) {
