@@ -35,8 +35,8 @@
             <div class="input-field-signin">
               <div :class="{ error: v$.services.service_category.$errors.length }">
                 <label class="form-label">Service Category Name
-                  <select class="form-control form-control-l" :class="{ error: v$.services.service_category.$errors.length }">
-                    <option v-for="category in this.service_categories" :key="category.id" :value="category.id">
+                  <select v-model="services.service_category" class="form-control form-control-l" :class="{ error: v$.services.service_category.$errors.length }">
+                    <option :selected="service_category_default_value === category.name" v-for="category in this.services.service_categories" :key="category.id" :value="category.id">
                       {{ category.name }}
                     </option>
                   </select>
@@ -171,10 +171,10 @@ export default {
         name: '',
         price: '',
         description: '',
+        service_categories: [],
       },
       id: '',
       image: '',
-      service_categories: [],
       time_slot: [],
       time_slot_one: [],
       showTime: false,
@@ -204,7 +204,8 @@ export default {
         service_category: { required  },
         price: {required, integer },
         description: {required},
-      }
+      },
+      service_category_default_value: ''
     }
   },
   methods: {
@@ -318,16 +319,14 @@ export default {
       this.showTime = true;
     },
     async submitForm() {
-      console.log('service_categories: ', this.service_categories)
-      console.log("errors: ", this.v$)
       this.v$.$touch();
+      console.log(this.services)
       if (!this.v$.$error) {
-        console.log(this.services.image)
         const response = await this.$apollo.mutate({
           mutation: required('@/graphql/ServiceUpdate.gql'),
           variables: {
             id: this.services.id,
-            serviceCategoryId: parseInt(this.services.new_service_cat),
+            serviceCategoryId: parseInt(this.services.service_category),
             name: this.services.name,
             description: this.services.description,
             price: parseFloat(this.services.price),
@@ -352,14 +351,13 @@ export default {
       console.log('', response)
       this.id = response.data.serviceAdmin[0].id;
       this.image = response.data.serviceAdmin[0].image;
-      this.service_categories = response.data.serviceAdmin[0].serviceCategories;
+      this.services.service_categories = response.data.serviceAdmin[0].serviceCategories;
       
       this.services.name = response.data.serviceAdmin[0].name;
       this.services.price = response.data.serviceAdmin[0].price;
       this.services.description = response.data.serviceAdmin[0].description;
       this.services.service_category = response.data.serviceAdmin[0].serviceCategoryId.name;
-      this.services.new_service_cat = this.services.service_category;
-      console.log('image from adminservicefind',this.services.service_category)
+      this.service_category_default_value = this.services.service_category
     },
     async show_time_slot() { },
     async show_time_slot_one(id) {
