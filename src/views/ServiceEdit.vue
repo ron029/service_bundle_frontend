@@ -34,9 +34,9 @@
           <div class="col-md-3 col-lg-6">
             <div class="input-field-signin">
               <div :class="{ error: v$.services.service_category.$errors.length }">
-                <label class="form-label">Service Category Name
+                <label class="form-label">name
                   <select v-model="services.service_category" class="form-control form-control-l" :class="{ error: v$.services.service_category.$errors.length }">
-                    <option :selected="service_category_default_value === category.name" v-for="category in this.services.service_categories" :key="category.id" :value="category.id">
+                    <option v-for="category in this.services.service_categories" :key="category.id" :value="category.id">
                       {{ category.name }}
                     </option>
                   </select>
@@ -159,8 +159,8 @@
 </template>
 
 <script>
-import { required, integer } from '@vuelidate/validators';
 import { useVuelidate } from '@vuelidate/core';
+import { required, integer } from '@vuelidate/validators';
 export default {
   name: 'ServiceEdit',
     setup () { return { v$: useVuelidate() } },
@@ -204,8 +204,8 @@ export default {
         service_category: { required  },
         price: {required, integer },
         description: {required},
-      },
-      service_category_default_value: ''
+        service_categories: {required}
+      }
     }
   },
   methods: {
@@ -252,7 +252,6 @@ export default {
         },
       });
       this.createTimeSlot = false
-      console.log(response);
       if (response) {
         alert('NEW TIMESLOT HAS BEEN ADDED')
         this.reloadPage()
@@ -320,26 +319,27 @@ export default {
     },
     async submitForm() {
       this.v$.$touch();
-      console.log(this.services)
       if (!this.v$.$error) {
+        this.services.service_category = parseInt(this.services.service_category);
+        this.services.price = parseInt(this.services.price);
+        console.log(this.services)
         const response = await this.$apollo.mutate({
-          mutation: required('@/graphql/ServiceUpdate.gql'),
+          mutation: require('@/graphql/ServiceUpdate.gql'),
           variables: {
             id: this.services.id,
-            serviceCategoryId: parseInt(this.services.service_category),
+            serviceCategoryId: this.services.service_category,
             name: this.services.name,
             description: this.services.description,
-            price: parseFloat(this.services.price),
-            image: this.services.image,
+            price: this.services.price,
+            image: this.services.image
           },
         });
-        console.log(response)
-        if (response) { alert ('YOUR PRODUCT HAS BEEN UPDATED')}
+        console.log('response after update', response)
         console.log(response.data.updateService.errors.length)
-        if (response.data.updateService.errors.length < 1) this.$router.push('/services');
-        // Handle the response here, e.g., display success message or update UI.
-      } else {
-        console.log('An error occured')
+        if (response.data.updateService.errors.length < 1) {
+          alert ('YOUR PRODUCT HAS BEEN UPDATED')
+          // this.$router.push('/services');
+        }
       }
     },
     async show_service(id) {
@@ -348,16 +348,13 @@ export default {
         query: require('@/graphql/AdminServiceFind.gql'),
         variables: { "id": new_id }
       });
-      console.log('', response)
-      this.id = response.data.serviceAdmin[0].id;
-      this.image = response.data.serviceAdmin[0].image;
-      this.services.service_categories = response.data.serviceAdmin[0].serviceCategories;
-      
+      this.services.id = response.data.serviceAdmin[0].id;
       this.services.name = response.data.serviceAdmin[0].name;
       this.services.price = response.data.serviceAdmin[0].price;
+      this.services.image = response.data.serviceAdmin[0].image;
       this.services.description = response.data.serviceAdmin[0].description;
+      this.services.service_categories = response.data.serviceAdmin[0].serviceCategories;
       this.services.service_category = response.data.serviceAdmin[0].serviceCategoryId.name;
-      this.service_category_default_value = this.services.service_category
     },
     async show_time_slot() { },
     async show_time_slot_one(id) {
