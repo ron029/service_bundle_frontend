@@ -244,7 +244,6 @@ export default {
             },
             price: {numeric, required},
             description: {required},
-            service_category: { required },
             service_name: { required },
             mobile_number: { required: helpers.withMessage('Mobile Number is required.', required), numeric },
             email: { required, email },
