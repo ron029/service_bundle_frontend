@@ -1,2 +1,0 @@
-class CartHistory < ApplicationRecord
-end
