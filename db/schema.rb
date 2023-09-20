@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_09_09_092648) do
+ActiveRecord::Schema.define(version: 2023_09_17_062912) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -77,12 +77,13 @@ ActiveRecord::Schema.define(version: 2023_09_09_092648) do
 
   create_table "time_slots", force: :cascade do |t|
     t.bigint "service_id", null: false
-    t.date "date"
+    t.date "start_date"
     t.time "start_time"
     t.time "end_time"
     t.integer "capacity"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.date "end_date"
     t.index ["service_id"], name: "index_time_slots_on_service_id"
   end
 

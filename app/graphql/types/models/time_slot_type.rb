@@ -3,7 +3,8 @@ module Types
     class TimeSlotType < Types::BaseObject
       field :id, ID, null: false
       field :service_id, Types::Models::ServiceType, null: false
-      field :date, GraphQL::Types::ISO8601Date, null: true
+      field :start_date, GraphQL::Types::ISO8601Date, null: true
+      field :end_date, GraphQL::Types::ISO8601Date, null: true
       field :start_time, String, null: true
       field :end_time, String, null: true
       field :capacity, Integer, null: true

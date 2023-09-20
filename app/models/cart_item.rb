@@ -1,5 +1,5 @@
 class CartItem < ApplicationRecord
-  before_save :validate_time_slot
+  # before_save :validate_time_slot
   # before_save :check_time_slot_capacity
 
   belongs_to :cart

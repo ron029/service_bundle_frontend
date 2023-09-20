@@ -6,7 +6,8 @@ module Mutations
       graphql_name 'CreateTimeSlot'
 
       argument :service_id, ID, required: true
-      argument :date, String, required: true
+      argument :start_date, GraphQL::Types::ISO8601Date, required: true
+      argument :end_date, GraphQL::Types::ISO8601Date, required: true
       argument :start_time, String, required: true
       argument :end_time, String, required: true
       argument :capacity, String, required: true

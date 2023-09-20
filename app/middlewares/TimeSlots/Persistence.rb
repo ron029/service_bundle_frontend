@@ -8,16 +8,24 @@ module TimeSlots
 
     def create(params)
       TimeSlot.create!(
-        service_id: params[:service_id], date: params[:date], start_time: params[:start_time],
-        end_time: params[:end_time], capacity: params[:capacity]
+        service_id: params[:service_id],
+        start_date: params[:start_date],
+        end_date: params[:end_date],
+        start_time: params[:start_time],
+        end_time: params[:end_time],
+        capacity: params[:capacity]
       )
     end
 
     def update(params)
       user = TimeSlot.find(params[:id])
       user.update(
-        service_id: params[:service_id], date: params[:date], start_time: params[:start_time],
-        end_time: params[:end_time], capacity: params[:capacity]
+        service_id: params[:service_id],
+        start_date: params[:start_date],
+        end_date: params[:end_date],
+        start_time: params[:start_time],
+        end_time: params[:end_time],
+        capacity: params[:capacity]
       )
       user
     end

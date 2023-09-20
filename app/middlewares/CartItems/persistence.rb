@@ -14,7 +14,7 @@ module CartItems
                 else
                   current_user_cart.id
                 end
-      
+
       c = CartItem.create(
         cart_id: cart_id, service_id: params[:service_id],
         date: params[:date], time: params[:time], status: 0
