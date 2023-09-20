@@ -2,7 +2,7 @@
   <div class="container">
     <h2>Service Category</h2>
     <div class="">
-      <!-- <span @click="toggleUpdateServiceCategory" class="btn btn-primary">New Service Category</span> -->
+      <span @click="toggleUpdateServiceCategory" class="btn btn-primary">New Service Category</span>
       <div v-if="UpdateServiceCategory" class="card">
         <div class="card-body">
           <table class="table">
@@ -24,7 +24,6 @@
                 </td>
                 <td><button id="upload_widget" @click.prevent="" class="cloudinary-button">Upload files</button></td>
                 <td>
-                  
                   <span @click="this.create_service_category" v-if="createNewServiceCategory" class="btn btn-success">CREATE</span>
                   <span @click="this.update_service_category" v-if="updateNewServiceCategory" class="btn btn-warning">SUBMIT</span>
                 </td>
@@ -44,13 +43,13 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="item in this.services.service_categories" :key="item.id">
+        <tr v-for="(item, index) in this.services.service_categories" :key="item.id">
           <td>{{ item.name }}</td>
           <td>{{ item.description }}</td>
           <td><img :src="item.image" style="width: 200px; height: 150px;"></td>
           <td>
-            <span @click="show_category_one(item)" class="btn btn-warning">edit</span><br>
-            <span @click="delete_category(item)" class="btn btn-danger">delete</span>
+            <span @click="show_category_one(item, index)" class="btn btn-warning">edit</span><br>
+            <span @click="delete_category(item, index)" class="btn btn-danger">delete</span>
           </td>
         </tr>
       </tbody>
@@ -74,6 +73,8 @@ export default {
         },
         createNewServiceCategory: true,
         updateNewServiceCategory: false,
+        update_category_index: 0,
+        delete_category_index: 0
       }
   },
   props: ['serviceCategoryId'],
@@ -96,7 +97,7 @@ export default {
         document.getElementById("upload_widget").addEventListener("click", function(){
             myWidget.open();
         }, false);  
-    }, 
+    },
     // Function to display the uploaded image
     // displayImage(imageUrl) {
     //     this.show_old_image = false;
@@ -108,6 +109,10 @@ export default {
     //     imagePreviewDiv.appendChild(image);
     // },
     toggleUpdateServiceCategory(){
+      this.update.name = '';
+      this.update.description = '';
+      this.update.image = '';
+      this.update.id = '';
       if (this.UpdateServiceCategory == false) this.UpdateServiceCategory = true;
 
       this.createNewServiceCategory = true;
@@ -123,10 +128,10 @@ export default {
             image: this.update.image
           },
         });
-        if (response) {
-          alert('NEW CATEGORY HAS BEEN ADDED');
-          this.reloadPage();
-        }
+        let data = response.data.createServiceCategory.serviceCategory;
+        this.services.service_categories.push(data);
+        alert('New Product named "' + data.name + '" has been added.');
+        console.log('the details for new product is: ', response);
       } catch (error) {
         console.error('GraphQL Error:', error);
       }
@@ -154,12 +159,20 @@ export default {
           },
         });
         if (response) {
+          let edit = this.services.service_categories[this.update_category_index];
+          edit.name = this.update.name;
+          edit.description = this.update.description;
+          edit.image = this.update.image;
+          console.log('this is the thing that we need to edit: ', edit);
+          console.log('the new data is now: ', edit)
           alert('YOUR SERVICE CATEGORY HAS BEEN UPDATE');
-          this.reloadPage()
+          // this.reloadPage()
         }
       } catch (error) { console.error("Graphql Error:", error); }
     },
-    async show_category_one(item) {
+    async show_category_one(item, index) {
+      console.log('modifying service category with index: ', index)
+      this.update_category_index = index;
       this.createNewServiceCategory = false;
       this.updateNewServiceCategory = true;
       console.log('the category to edit is ',item.id)
@@ -178,23 +191,25 @@ export default {
         console.log('File to edit', this.update)
       } catch (error) { console.error("Graphql Error:", error); }
     },
-    async delete_category(item){
-      try {
-        const response = await this.$apollo.mutate({
-          mutation: require('@/graphql/ServiceCategoryDelete.gql'),
-          variables: {
-            "id": parseInt(item.id)
-          },
-        });
-        console.log(response)
-        alert('DELETION COMPLETE!')
-        this.reloadPage();
-        console.log('File to edit', this.update)
-      } catch (error) { console.error("Graphql Error:", error); }
-    },
-    reloadPage() {
-      // Reload the current page
-      window.location.reload();
+    async delete_category(item, index){
+      const userConfirmed = window.confirm("Do you want to delete " + item.name + " category?");
+      if (userConfirmed) {
+        console.log('deleting service category with index: ', index);
+        this.delete_category_index = index;
+        try {
+          const response = await this.$apollo.mutate({
+            mutation: require('@/graphql/ServiceCategoryDelete.gql'),
+            variables: {
+              "id": parseInt(item.id)
+            },
+          });
+          console.log(response)
+          alert('DELETION COMPLETE!')
+          console.log('the item to delete is ');
+          this.services.service_categories.splice(this.delete_category_index, 1);
+          console.log('File to edit', this.update)
+        } catch (error) { console.error("Graphql Error:", error); }
+      }
     },
   },
   components: {

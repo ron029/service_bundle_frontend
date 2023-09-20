@@ -1,9 +1,7 @@
 query show_time_slot_by_service($id: ID!) {
   timeSlotByService(id: $id) {
-    serviceId {
-      id
-    }
-    date
+    startDate
+    endDate
     startTime
     endTime
     capacity

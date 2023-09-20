@@ -65,6 +65,7 @@ export default {
         price: '',
         description: '',
         service_categories: [],
+
       },
     }
   },
@@ -98,7 +99,7 @@ export default {
             myWidget.open();
         }, false);  
     }, 
-        // Function to display the uploaded image
+    // Function to display the uploaded image
     displayImage(imageUrl) {
         const imagePreviewDiv = document.getElementById('image-preview');
         const image = document.createElement('img');
@@ -133,8 +134,13 @@ export default {
             image: this.image
           },
         });
+        let data = this.services;
+        data['image'] = this.image;
+        data['id'] = response.data.createService.service.id;
+        console.log('the data of new services is: ', data);
+        console.log('reply from service is: ', response)
         if(response) { alert("SUCCESS, new service has been recorded") }
-        this.reloadPage()
+        this.$emit('newServiceAdded', data);
         this.time_slot_one = null;
         } catch (error) { console.error("Graphql Error:", error); }
       }

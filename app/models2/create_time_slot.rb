@@ -1,0 +1,2 @@
+class CreateTimeSlot < ApplicationRecord
+end

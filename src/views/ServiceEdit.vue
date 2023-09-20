@@ -74,20 +74,22 @@
         <span @click="new_time_slot" class="btn btn-primary">New Time Slot</span>
         <table class="table">
           <tr>
-            <td>Date</td>
+            <td>Start Date</td>
+            <td>End Date</td>
             <td>Start Time</td>
             <td>End Time</td>
             <td>Capacity</td>
             <td>Action</td>
           </tr>
-          <tr v-for="item in this.time_slot" :key="item.id">
-            <td>{{ item.date }}</td>
+          <tr v-for="(item, index) in time_slot" :key="item.id">
+            <td>{{ item.startDate }}</td>
+            <td>{{ item.endDate }}</td>
             <td>{{ formattedStartTime(item.startTime) }}</td>
             <td>{{ formattedStartTime(item.endTime) }}</td>
             <td>{{ item.capacity }}</td>
             <td>
-              <span @click="edit_time_slot(item)" class="btn btn-warning">edit</span>
-              <span @click="delete_time_slot(item)" class="btn btn-danger">Delete</span>
+              <span @click="edit_time_slot(item, index)" class="btn btn-warning">edit</span>
+              <span @click="delete_time_slot(item, index)" class="btn btn-danger">Delete</span>
             </td>
           </tr>
         </table>
@@ -98,33 +100,27 @@
             <h1></h1>
             <table class="table">
               <tr>
-                <td>Date</td>
+                <td>Start Date</td>
+                <td>End Date</td>
                 <td>Start Time</td>
                 <td>End Time</td>
                 <td>Capacity</td>
                 <td>Action</td>
               </tr>
               <tr v-if="delete_time">
-                <td>{{ this.time_slot_one.date }}</td>
-                <td>{{ formattedStartTime(this.time_slot_one.startTime) }}</td>
-                <td>{{ formattedStartTime(this.time_slot_one.endTime) }}</td>
+                <td>{{ this.time_slot_one.start_date }}</td>
+                <td>{{ this.time_slot_one.end_date }}</td>
+                <td>{{ this.time_slot_one.start_time }}</td>
+                <td>{{ this.time_slot_one.end_time }}</td>
                 <td>{{ this.time_slot_one.capacity }}</td>
                 <td><span @click="this.delete_time_save" class="btn btn-danger">Delete</span></td>
               </tr>
               <tr v-if="edit_time">
-                <td> <input type="date" v-model="time_slot_one.date"> </td> 
-                <td>
-                  {{ formattedStartTime(this.time_slot_one.startTime) }}<br>
-                  <input type="time" v-model="time_slot_one.startTime">
-                </td>
-                <td>
-                  {{ formattedStartTime(this.time_slot_one.endTime) }}<br>
-                  <input type="time" v-model="time_slot_one.endTime">
-                </td>
-                <td>
-                  {{ this.time_slot_one.capacity }}<br>
-                  <input type="number" v-model="time_slot_one.capacity">
-                </td>
+                <td> <input type="date" v-model="time_slot_one.start_date"> </td> 
+                <td> <input type="date" v-model="time_slot_one.end_date"> </td> 
+                <td> <input type="time" v-model="time_slot_one.start_time"> </td>
+                <td> <input type="time" v-model="time_slot_one.end_time"> </td>
+                <td> <input type="number" v-model="time_slot_one.capacity"> </td>
                 <td><span @click="this.edit_time_save" class="btn btn-warning">edit</span></td>
               </tr>
             </table>
@@ -138,14 +134,16 @@
             <p>please ensure the before and after of time, or else it wont save!</p>
             <table class="table">
               <tr>
-                <td>Date</td>
+                <td>Start Date</td>
+                <td>End Date</td>
                 <td>Start Time</td>
                 <td>End Time</td>
                 <td>Capacity</td>
                 <td>Action</td>
               </tr>
               <tr>
-                <td> <input type="date" v-model="newts.date"> </td>
+                <td> <input type="date" v-model="newts.start_date"> </td>
+                <td> <input type="date" v-model="newts.end_date"> </td>
                 <td> <input type="time" v-model="newts.start_time"> </td>
                 <td> <input type="time" v-model="newts.end_time"> </td>
                 <td> <input type="number" v-model="newts.capacity"> </td>
@@ -177,25 +175,29 @@ export default {
       id: '',
       image: '',
       time_slot: [],
-      time_slot_one: [],
+      time_slot_one: {
+        start_date: '',
+        end_date: '',
+        start_time: '',
+        end_time: '',
+        capacity: '',
+        id: ''
+      },
       showTime: false,
       edit_time: false,
       delete_time: false,
-      time_slot_old: {
-        start_time: '',
-        end_time: '',
-        date: '',
-        capacity: ''
-      },
       time_slot_create: true,
       createTimeSlot: false,
+      index_edit_timeslot: 0,
       newts: {
+        start_date: '',
+        end_date: '',
         start_time: '',
         end_time: '',
-        date: '',
         capacity: ''
       },
       show_old_image: true,
+      time_slot_index_delete: 0,
     }
   },
   validations () {
@@ -208,6 +210,10 @@ export default {
         service_categories: {required},
       }
     }
+  },
+  props: {
+    id_to_edit: Number,
+    index_to_edit: Number,
   },
   methods: {
     upload(){
@@ -242,11 +248,13 @@ export default {
       this.createTimeSlot = true
     },
     async create_time_slot(){
+      
       const response = await this.$apollo.mutate({
         mutation: require('@/graphql/TimeSlotCreate.gql'),
         variables: {
-          "serviceId": this.$route.params.id,
-          "date": this.newts.date,
+          "serviceId": this.id_to_edit,
+          "startDate": this.newts.start_date,
+          "endDate": this.newts.end_date,
           "startTime": this.newts.start_time,
           "endTime": this.newts.end_time,
           "capacity": this.newts.capacity,
@@ -254,10 +262,21 @@ export default {
       });
       this.createTimeSlot = false
       if (response) {
-        alert('NEW TIMESLOT HAS BEEN ADDED')
-        this.reloadPage()
+        console.log('serviceEdit: info for new timeslot: ', response)
+        alert('NEW TIMESLOT HAS BEEN ADDED');
+        const new_ts_data = response.data.createTimeSlot.timeSlot;
+        let index_new_ts = {
+          startDate: new_ts_data.startDate,
+          endDate: new_ts_data.endDate,
+          startTime: new_ts_data.startTime,
+          endTime: new_ts_data.endTime,
+          id: new_ts_data.id,
+          capacity: new_ts_data.capacity
+        }
+        this.time_slot.push(index_new_ts);
+        // TODO emit timeslot :create
+        this.$emit('updateTimeSlot', {index_to_edit: this.index_to_edit, time_slot: this.time_slot});
       }
-      this.show_time_slot_by_service(this.$route.params.id)
     },
     async edit_time_save() {
       console.log('the id of specific timeslot is now',this.time_slot_one.id)
@@ -267,19 +286,36 @@ export default {
       this.showTime = false;
       this.edit_time = false;
       try {
+        console.log('data for update: ',this.time_slot_one)
         const response = await this.$apollo.mutate({
           mutation: require('@/graphql/TimeSlotUpdate.gql'),
           variables: {
             "id": parseid,
-            "serviceId": this.$route.params.id,
-            "date": this.time_slot_one.date,
-            "startTime": this.time_slot_one.startTime,
-            "endTime": this.time_slot_one.endTime,
+            "serviceId": this.id_to_edit,
+            "startDate": this.time_slot_one.start_date,
+            "endDate": this.time_slot_one.end_date,
+            "startTime": this.time_slot_one.start_time,
+            "endTime": this.time_slot_one.end_time,
             "capacity": parseInt(this.time_slot_one.capacity),
           },
         });
-        console.log(response)
-        this.time_slot_one = null;
+
+        if (response.data.updateTimeSlot.errors.length < 0) {
+          console.log(response.data.updateTimeSlot.errors);
+        } else {
+          console.log(response)
+          console.log('list of timeslot are: ', this.time_slot)
+          console.log('index of timeslot to edit is: ', this.index_edit_timeslot)
+          this.time_slot[this.index_edit_timeslot]['id'] = parseid
+          this.time_slot[this.index_edit_timeslot]['capacity'] = parseInt(this.time_slot_one.capacity)
+          this.time_slot[this.index_edit_timeslot]['endDate'] = this.time_slot_one.end_date
+          this.time_slot[this.index_edit_timeslot]['endTime'] = this.formattedLongTime(this.time_slot_one.end_time)
+          this.time_slot[this.index_edit_timeslot]['startDate'] =  this.time_slot_one.start_date
+          this.time_slot[this.index_edit_timeslot]['startTime'] = this.formattedLongTime(this.time_slot_one.start_time)
+          console.log('list of timeslot after edit: ', this.time_slot);
+          // TODO emit timeslot :update
+          this.$emit('updateTimeSlot', {index_to_edit: this.index_to_edit, time_slot: this.time_slot});
+        }
       } catch (error) { console.error("Graphql Error:", error); }
     },
     async delete_time_save(){
@@ -294,8 +330,10 @@ export default {
           },
         });
         if (response) {
-          alert('TIMESLOT HAS BEEN DELETED.')
-          this.reloadPage();
+          this.time_slot.splice(this.time_slot_index_delete, 1);
+          alert('TIMESLOT HAS BEEN DELETED.');
+          // TODO emit timeslot :delete
+          this.$emit('updateTimeSlot', {index_to_edit: this.index_to_edit, time_slot: this.time_slot});
         }
         console.log(response)
         this.time_slot_one = null;
@@ -306,15 +344,18 @@ export default {
     },
     popupTime(){ this.showTime = true; },
     closeTime(){ this.edit_time = true; },
-    async edit_time_slot(item) {
-      console.log('edit_time_slot_id is now',parseInt(item.id))
+    async edit_time_slot(item, index) {
+      this.index_edit_timeslot = index;
+      console.log('edit_time_slot_id is now', parseInt(item.id))
+      console.log(typeof item.id)
       await this.show_time_slot_one(parseInt(item.id))
       this.edit_time = true;
       this.showTime = true;
     },
-    async delete_time_slot(item) {
+    async delete_time_slot(item, index) {
+      this.time_slot_index_delete = parseInt(index);
       console.log('delete_time_slot_id is ',parseInt(item.id))
-      await this.show_time_slot_one(parseInt(item.id))
+      await this.show_time_slot_one(parseInt(item.id), index)
       this.delete_time = true;
       this.showTime = true;
     },
@@ -335,6 +376,7 @@ export default {
             image: this.services.image
           },
         });
+        this.$emit('updateServicePage', {index_to_edit: this.index_to_edit, service_details: this.services})
         console.log('response after update', response)
         console.log(response.data.updateService.errors.length)
         if (response.data.updateService.errors.length < 1) {
@@ -357,18 +399,20 @@ export default {
       this.services.service_categories = response.data.serviceAdmin[0].serviceCategories;
       this.services.service_category = response.data.serviceAdmin[0].serviceCategoryId.name;
     },
-    async show_time_slot() { },
     async show_time_slot_one(id) {
       const new_id = parseInt(id);
       const response = await this.$apollo.query({
         query: require('@/graphql/TimeSlotOne.gql'),
         variables: { "id": new_id }
       });
-      this.time_slot_one = response.data.timeSlotOne
-      this.time_slot_old.capacity = response.data.timeSlotOne.capacity
-      this.time_slot_old.date = response.data.timeSlotOne.date
-      this.time_slot_old.end_time = response.data.timeSlotOne.endTime
-      this.time_slot_old.start_time = response.data.timeSlotOne.startTime
+      // FIXME: timeslot when edit button clicks appears wrong info
+      console.log('time slot to edit is: ', response)
+      this.time_slot_one.id = response.data.timeSlotOne.id;
+      this.time_slot_one.capacity = response.data.timeSlotOne.capacity
+      this.time_slot_one.start_date = response.data.timeSlotOne.startDate;
+      this.time_slot_one.end_date = response.data.timeSlotOne.endDate;
+      this.time_slot_one.end_time = this.formattedStartTime(response.data.timeSlotOne.endTime);
+      this.time_slot_one.start_time = this.formattedStartTime(response.data.timeSlotOne.startTime);
     },
     async show_time_slot_by_service(id) {
       const new_id = parseInt(id);
@@ -376,32 +420,49 @@ export default {
         query: require('@/graphql/TimeSlotByService.gql'),
         variables: { "id": new_id }
       });
+
       this.time_slot = response.data.timeSlotByService
-      console.log('TS BY SERVICE',this.time_slot)
+      console.log('TS BY SERVICE', this.time_slot)
     },
     reloadPage() {
       // Reload the current page
       window.location.reload();
     },
+    formattedLongTime(time) {
+      // Parse the input time string into a Date object
+      const inputTime = new Date(`2000-01-01T${time}`);
+      
+      // Calculate the UTC equivalent time
+      const utcTime = new Date(inputTime.getTime() - inputTime.getTimezoneOffset() * 60000);
+
+      // Format the UTC time as "YYYY-MM-DD HH:mm:ss UTC"
+      const formattedDatetime = utcTime.toISOString().replace('T', ' ').replace(/\.\d+Z$/, ' UTC');
+
+      return formattedDatetime;
+    },
     formattedStartTime(time) {
-      // Parse the start_time string into a Date object
-      const dateObj = new Date(time);
+      // Remove "UTC" from the end of the input datetime string
+      const timeWithoutUTC = time.replace(' UTC', '');
 
-      // Extract the hour, minute, and AM/PM parts
-      const hour = dateObj.getUTCHours();
-      const minute = dateObj.getUTCMinutes();
-      const ampm = hour >= 12 ? "PM" : "AM";
+      // Parse the datetime string into a Date object
+      const dateObj = new Date(timeWithoutUTC);
 
-      // Convert to 12-hour format and format the hour and minute as "HH:MM AM/PM"
-      const formattedHour = ((hour + 11) % 12 + 1).toString().padStart(2, '0');
-      return `${formattedHour}:${minute.toString().padStart(2, '0')} ${ampm}`;
+      // Extract the hour, minute, and second parts
+      const hour = dateObj.getHours();
+      const minute = dateObj.getMinutes();
+      const second = dateObj.getSeconds();
+
+      // Format the hour, minute, and second as "HH:MM:SS"
+      const formattedHour = hour.toString().padStart(2, '0');
+      const formattedMinute = minute.toString().padStart(2, '0');
+      const formattedSecond = second.toString().padStart(2, '0');
+
+      return `${formattedHour}:${formattedMinute}:${formattedSecond}`;
     }
   },
   mounted() {
-    this.time_slot
-    this.show_service(this.$route.params.id);
-    this.show_time_slot(this.$route.params.id);
-    this.show_time_slot_by_service(this.$route.params.id);
+    this.show_service(this.id_to_edit);
+    this.show_time_slot_by_service(this.id_to_edit);
     this.upload();
   }
 }

@@ -7,10 +7,12 @@ query service_by_category($id: ID!) {
       description
       name
     }
+    image
     price
     timeSlot {
       id
-      date
+      startDate
+      endDate
       startTime
       endTime
     }
