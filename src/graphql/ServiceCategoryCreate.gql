@@ -8,6 +8,7 @@ mutation create_service_category($name: String!, $description: String!, $image: 
       name
       id
       description
+      image
     }
     errors
   }

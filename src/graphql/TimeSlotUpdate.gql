@@ -1,16 +1,18 @@
-mutation update_time_slot($id: ID!, $serviceId: ID!, $date: String!, $startTime: String!,
+mutation update_time_slot($id: ID!, $serviceId: ID!, $startDate: String!, $endDate: String!, $startTime: String!,
 $endTime: String!, $capacity: Int!) {
   updateTimeSlot(input: {
     id: $id,
     serviceId: $serviceId,
-    date: $date,
+    startDate: $startDate,
+    endDate: $endDate,
     startTime: $startTime,
     endTime: $endTime,
     capacity: $capacity
   }) {
     errors
     timeSlot {
-      date
+      startDate
+      endDate
     }
   }
 }

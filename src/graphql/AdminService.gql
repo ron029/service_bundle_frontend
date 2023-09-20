@@ -4,10 +4,12 @@ query admin_service {
       id
       name
     }
+    price
     name
     description
     timeSlot {
-      date
+      startDate
+      endDate
       startTime
       endTime
     }

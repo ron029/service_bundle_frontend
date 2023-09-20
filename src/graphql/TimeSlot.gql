@@ -1,7 +1,8 @@
 query time_slot ($id: ID!){
   timeSlot(id: $id) {
     id
-    date
+    startDate
+    endDate
     startTime
     endTime
     capacity
