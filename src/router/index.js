@@ -1,8 +1,18 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
+import store from '@/store';
+
+// signin and signup
 import LoginPage from '@/views/LoginPage.vue';
 import SignupPage from '@/views/SignupPage.vue';
+import SignupEntrepPage from '@/views/SignupEntrepPage.vue';
+
+// customer
 import HomePage from '@/views/HomePage.vue';
+import CheckoutPage from '@/components/CheckoutPage.vue';
+import CartPage from '@/components/CartPage.vue';
+
+// merchant
 import MerchantPage from '@/views/MerchantPage.vue';
 import BookingPage from '@/views/BookingPage.vue';
 import ServicePage from '@/views/ServicePage.vue';
@@ -10,15 +20,12 @@ import ServiceEdit from '@/views/ServiceEdit.vue';
 import ServiceNew from '@/views/ServiceNew.vue';
 import ServiceCategoryPage from '@/views/ServiceCategoryPage.vue';
 import ServiceDetails from '@/components/ServiceDetails.vue';
-import TimeSlotDetails from '@/components/ServiceDetails.vue';
-import CartPage from '@/components/CartPage.vue';
-import CheckoutPage from '@/components/CheckoutPage.vue';
+import TimeSlotDetails from '@/components/TimeSlotDetails.vue';
 import CustomerBookingPage from '@/components/CustomerBookingPage.vue';
 import RegisteredPage from '@/components/RegisteredPage.vue';
-import BookingManager from '@/views/BookingManager.vue';
-import SignupEntrepPage from '@/views/SignupEntrepPage.vue';
-import store from '@/store';
 
+// manager
+import BookingManager from '@/views/BookingManager.vue';
 Vue.use(VueRouter);
 
 const routes = [

@@ -35,7 +35,7 @@
                     <th>status</th>
                   </tr>
                 </thead>
-                <tbody>
+                <tbody v-if="data && data.adminCartItem">
                   <tr v-for="item in data.adminCartItem" :key="item.id">
                     <td>{{ item.id }}</td>
                     <td>{{ item.serviceName }}</td>
@@ -45,6 +45,9 @@
                     <td>{{ item.time }}</td>
                     <td>{{ item.status }}</td>
                   </tr>
+                </tbody>
+                <tbody v-else>
+                  <tr><td colspan="7">No record found.</td></tr>
                 </tbody>
               </table>
             </div>
@@ -70,10 +73,13 @@
                       <th>date</th>
                       <th>time</th>
                       <th>status</th>
-                      <th v-if="get_role !== 'manager'">action</th>
+                      <th
+                      >
+                       <!-- v-if="get_role !== 'manager'" -->
+                      action</th>
                     </tr>
                   </thead>
-                  <tbody>
+                  <tbody v-if="data && data.adminCartItem">
                     <tr v-for="item in data.adminCartItem" :key="item.id">
                       <td>{{ item.id }}</td>
                       <td>{{ item.serviceName }}</td>
@@ -82,7 +88,9 @@
                       <td>{{ item.date }}</td>
                       <td>{{ item.time }}</td>
                       <td>{{ item.status }}</td>
-                      <td v-if="this.get_role() != 'manager'">
+                      <td 
+                      >
+                      <!-- v-if="this.get_role() != 'manager'" --> 
                         <span @click="action_item(item, 'completed')" class="btn btn-success">complete</span>
                         <span @click="action_item(item, 'cancelled')" class="btn btn-danger">cancelled</span>
                       </td>
@@ -98,23 +106,25 @@
           <template v-slot="{ result: { data, loading } }">
             <div v-if="loading">Loading...</div>
             <div v-else>
-              <!-- Check if there are zero records -->
-              <!-- <div v-if="data.adminCartItem.length === 0">
-                <p>No records found.</p>
-              </div> -->
-                <table class="table">
-                  <thead>
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>id</th>
+                    <th>serviceName</th>
+                    <th>userName</th>
+                    <th>userLastname</th>
+                    <th>date</th>
+                    <th>time</th>
+                    <th>status</th>
+                  </tr>
+                </thead>
+                <tbody  v-if="data && data.adminCartItemCountService">
+                  <template>
                     <tr>
-                      <th>id</th>
-                      <th>serviceName</th>
-                      <th>userName</th>
-                      <th>userLastname</th>
-                      <th>date</th>
-                      <th>time</th>
-                      <th>status</th>
+                      <td colspan="7">No records found.</td>
                     </tr>
-                  </thead>
-                  <tbody>
+                  </template>
+                  <template v-if="data && data.adminCartItem">
                     <tr v-for="item in data.adminCartItem" :key="item.id">
                       <td>{{ item.id }}</td>
                       <td>{{ item.serviceName }}</td>
@@ -124,10 +134,11 @@
                       <td>{{ item.time }}</td>
                       <td>{{ item.status }}</td>
                     </tr>
-                  </tbody>
-                </table>
-              </div>
-            </template>
+                  </template>
+                </tbody>
+              </table>
+            </div>
+          </template>
         </ApolloQuery>
       </div>
       <div class="tab-pane fade" id="disabled-tab-pane" role="tabpanel" aria-labelledby="disabled-tab" tabindex="0">
@@ -152,7 +163,7 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <template v-if="data.adminCartItem">
+                    <template v-if="data && data.adminCartItem">
                       <tr v-for="item in data.adminCartItem" :key="item.id">
                         <td>{{ item.id }}</td>
                         <td>{{ item.serviceName }}</td>
@@ -187,10 +198,12 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr v-for="item in data.adminCartItemCountService" :key="item.id">
-                      <td>{{ item.count }}</td>
-                      <td>{{ item.service.name }}</td>
-                    </tr>
+                    <template v-if="data && data.adminCartItemCountService">
+                      <tr v-for="item in data.adminCartItemCountService" :key="item.id">
+                        <td>{{ item.count }}</td>
+                        <td>{{ item.service.name }}</td>
+                      </tr>
+                    </template>
                   </tbody>
                 </table>
               </div>
@@ -209,16 +222,16 @@ export default {
   computed: {
     ...mapState(['userRole']),
   },
-  mounted(){
-    console.log('oksdf')
-      console.log(this.get_role());
-    },  
+  // mounted(){
+  //   console.log('oksdf')
+  //     console.log(this.get_role());
+  // },
   methods: {
-    get_role() {
-      const userRole = localStorage.getItem('userRole');
-      console.log('asdfasdf', userRole);
-      return userRole;
-    },
+    // get_role() {
+    //   const userRole = localStorage.getItem('userRole');
+    //   console.log('asdfasdf', userRole);
+    //   return userRole;
+    // },
     async action_item(item, action) {
       console.log(item, action)
       let status = 0;
@@ -242,7 +255,6 @@ export default {
       window.location.reload();
     },
   }
-  
 }
 console.log('asdf')
 </script>

@@ -1,6 +1,5 @@
 <template>
     <div>
-        <!-- <% provide(:title, custom_title('Sign Up'))%> -->
         <div class="container h-custom">
             <div class="row d-flex justify-content-center align-items-center h-100">
                 <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
@@ -237,7 +236,7 @@ export default {
             first_name: {
                 required: helpers.withMessage('First Name is required.', required),
                 alphabeticWithSpaces: helpers.withMessage('First Name can only contain letters and spaces.', alphabeticWithSpaces),
-            }, 
+            },
             last_name: {
                 required: helpers.withMessage('Last Name is required.', required),
                 alphabeticWithSpaces: helpers.withMessage('Last Name can only contain letters and spaces.', alphabeticWithSpaces),
