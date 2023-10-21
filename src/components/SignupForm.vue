@@ -230,6 +230,6 @@ export default {
     left: 17px;
 }
 .register-stepper {
-    display: none;
+    /* display: none; */
 }
 </style>

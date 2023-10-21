@@ -74,6 +74,11 @@ export default {
         ...mapState(['isAuthenticated', 'userRole']),
     },
     methods: {
+        is_logged_in() {
+        if (this.get_role() == null) {
+            this.$router.push('/');
+        }
+        },
         async submitForm() {
             this.v$.$touch();
             if (!this.v$.$error) {
@@ -106,9 +111,9 @@ export default {
                     await onLogin(createProvider({}, headers), token);
                     // redirect to Homepage
                     if (this.get_role()=="admin") {
-                        this.$router.push('/merchant');
+                        window.location.href = '/merchant';
                     } else {
-                        this.$router.push('/');
+                        window.location.href = '/';
                     }
                 }
             }
@@ -127,6 +132,9 @@ export default {
             store.commit('setUserRole', role); // Replace 'admin' with your actual user role data
         },
     },
+    mounted() {
+        this.is_logged_in();
+    }
 
 }
 </script>

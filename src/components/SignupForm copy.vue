@@ -6,13 +6,13 @@
                     <div class="d-flex flex-row align-items-center justify-content-center justify-content-lg-start">
                         <p class="login_text lead fw-normal mb-0 me-3"></p>
                     </div>
-                    <div class="register-stepper">
+                    <!-- <div class="register-stepper">
                         <div class="step" :class="{'step-active' : step === 1, 'step-done': step > 1}"><span class="step-number">1</span></div>
                         <div class="step" :class="{'step-active' : step === 2, 'step-done': step > 2}"><span class="step-number">2</span></div>
                         <div class="step" :class="{'step-active' : step === 3, 'step-done': step > 3}"><span class="step-number">3</span></div>
                         <div class="step" :class="{'step-active' : step === 3, 'step-done': step > 3}"><span class="step-number">4</span></div>
                         <div class="step" :class="{'step-active' : step === 3, 'step-done': step > 3}"><span class="step-number">5</span></div>
-                    </div>
+                    </div> -->
                     <form @submit.prevent="submitForm">
                         <transition name="slide-fade">
                             <section v-show="step === 1">

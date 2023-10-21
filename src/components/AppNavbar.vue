@@ -9,35 +9,24 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item" v-if="isAuthenticated && this.get_role() == 'admin'">
-                        <span @click="currentShowPage('bookings')">Bookings &nbsp;&nbsp;</span>
+                    <li class="nav-item" v-if="isAuthenticated && this.get_role() == 'admin' || this.get_role() == 'manager'">
+                        <span class="nav-link" @click="currentShowPage('bookings')">Bookings</span>
                     </li>
-                    <li class="nav-item" v-if="isAuthenticated && this.get_role() == 'admin'">
-                        <span @click="currentShowPage('services')">Services &nbsp;&nbsp;</span>
+                    <li class="nav-item" v-if="isAuthenticated && this.get_role() == 'admin' || this.get_role() == 'manager'">
+                        <span class="nav-link" @click="currentShowPage('services')">Services</span>
                     </li>
-                    <li class="nav-item" v-if="isAuthenticated && this.get_role() == 'admin'">
-                        <span @click="currentShowPage('serviceCategories')">Service Categories &nbsp;&nbsp;</span>
+                    <li class="nav-item" v-if="isAuthenticated && this.get_role() == 'admin' || this.get_role() == 'manager'">
+                        <span class="nav-link" @click="currentShowPage('serviceCategories')">Service Categories</span>
+                    </li>
+                    <li class="nav-item" v-if="isAuthenticated && this.get_role() == 'manager'">
+                        <span class="nav-link" @click="currentShowPage('registered')">Registered</span>
+                        <!-- <router-link class="nav-link" to="/registered">Registered</router-link> -->
                     </li>
                     <li class="nav-item" v-if="isAuthenticated && this.get_role() == 'customer'">
                         <router-link class="nav-link" to="/cart">Cart</router-link>
                     </li>
                     <li class="nav-item" v-if="isAuthenticated && this.get_role() == 'customer'">
                         <a class="nav-link" href="/customer/booking">Bookings</a>
-                    </li>
-                    <li class="nav-item" v-if="isAuthenticated && this.get_role() == 'manager'">
-                        <router-link class="nav-link" to="/registered">Registered</router-link>
-                    </li>
-                    <li class="nav-item" v-if="isAuthenticated && this.get_role() == 'manager'">
-                        <a href="/services" class="nav-link">Services</a>
-                    </li>
-                    <li class="nav-item" v-if="isAuthenticated && this.get_role() == 'manager'">
-                        <router-link class="nav-link" to="/service_categories">Service_Categories</router-link>
-                    </li>
-                    <li class="nav-item" v-if="isAuthenticated && this.get_role() == 'manager'">
-                        <router-link class="nav-link" to="/booking">Bookings1</router-link>
-                    </li>
-                    <li class="nav-item" v-if="isAuthenticated && this.get_role() == 'manager'">
-                        <router-link class="nav-link" to="/booking_manager">Bookings2</router-link>
                     </li>
                     <!-- <li class="nav-item dropdown"> -->
                         <!-- <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"> Dropdown </a>
@@ -62,7 +51,7 @@
                 </div>
             </div>
         </nav>
-        <div v-if="this.get_role()=='admin'">
+        <div v-if="this.get_role()=='admin' || this.get_role()=='manager'">
             <ServicePage
             v-if="currentPage === 'services'"
             v-on:showServiceNew="showServiceNewPage()"
@@ -76,6 +65,9 @@
             <ServiceNew 
             v-else-if="showNew"
             v-on:newServiceAdded="getLatestService($event)"
+            />
+            <RegisteredPage 
+            v-else-if="currentPage === 'registered' && this.get_role()=='manager'"
             />
             <ServiceEdit 
             v-else
@@ -94,6 +86,7 @@ import ServicePage from '@/views/ServicePage.vue';
 import ServiceCategoryPage from '@/views/ServiceCategoryPage.vue';
 import ServiceNew from '@/views/ServiceNew.vue';
 import ServiceEdit from '@/views/ServiceEdit.vue';
+import RegisteredPage from '@/components/RegisteredPage.vue';
 
 import { mapState, mapMutations } from 'vuex';
 import { createProvider, onLogout } from '@/vue-apollo';
@@ -119,7 +112,8 @@ export default {
         BookingPage,
         ServiceCategoryPage,
         ServiceNew,
-        ServiceEdit
+        ServiceEdit,
+        RegisteredPage
     },
     computed: {
         ...mapState(['isAuthenticated', 'userRole']),
@@ -171,7 +165,7 @@ export default {
                 this.clearAuthentication();
                 this.updateUserRole(null);
                 // store.commit('clearUserRole');
-
+                console.log('role after logout is ', this.get_role());
                 if (this.$route.path !== '/login') this.$router.push('/login');
             } catch (error) {
                 console.error('Error logging out:', error);
@@ -193,4 +187,6 @@ export default {
 .logout {
     cursor: pointer;
 }
+
+
 </style>
