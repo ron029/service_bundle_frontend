@@ -38,7 +38,6 @@ const routes = [
   { path: '/service_categories', component: ServiceCategoryPage},
   { path: '/services/new', component: ServiceNew },
   { path: '/services/:id/edit', component: ServiceEdit },
-  { path: '/checkout', component: CheckoutPage },
   { path: '/cart', component: CartPage },
   { path: '/customer/booking', component: CustomerBookingPage },
   { path: '/registered', component: RegisteredPage },
@@ -50,6 +49,7 @@ const routes = [
     component: ServicePage,
     props: true
   },
+  { path: '/checkout/:cart_history_id', component: CheckoutPage, },
   {
     path: '/service_categories/:categoryId/services/:serviceId',
     name: 'service-details',
