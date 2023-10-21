@@ -1,7 +1,7 @@
 <template>
-  <div class="container">
-    <div v-if="userRole === 'admin'">
-      <ServiceList  
+  <div class="">
+    <div v-if="userRole === 'admin' || userRole === 'manager'">
+      <ServiceList
       v-on:showServiceNew="showServiceNewPage()" 
       v-on:showEditService="showEditPage($event)"
       :new_service="newServiceData"
@@ -12,14 +12,10 @@
     <div v-if="userRole === 'customer'">
       <ServiceListCustomer />
     </div>
-    <div v-if="userRole === 'manager'">
-      <ServiceList />
-    </div>
   </div>
 </template>
 
 <script>
-// import ServiceListManager from '@/components/ServiceListManager.vue';
 import ServiceListCustomer from '@/components/ServiceListCustomer.vue';
 import ServiceList from '@/components/ServiceList.vue';
 export default {
@@ -30,7 +26,8 @@ export default {
       service_category_id: '',
       newServiceData: {},
       updateServiceData: {},
-      updateServiceTimeSlotData: {}
+      updateServiceTimeSlotData: {},
+      modalId: 'customModal',
     };
   },
   created() {
@@ -42,7 +39,6 @@ export default {
   components: {
     ServiceList,
     ServiceListCustomer,
-    // ServiceListManager
   },
   mounted() {
     this.userRole = this.get_role();
