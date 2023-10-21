@@ -1,14 +1,11 @@
 <template>
-  <div class="container">
-      <h2>Bookings</h2>
-      <BookList v-if="userRole === 'admin'"/>
-      <BookListManager v-if="userRole === 'manager'"/>
+  <div class="container-fluid">
+    <BookList v-if="userRole === 'admin' || userRole === 'manager'"/>
   </div>
 </template>
 
 <script>
 import BookList from '@/components/BookList.vue';
-import BookListManager from '@/components/BookListManager.vue';
 export default {
   data() {
       return {
@@ -18,7 +15,6 @@ export default {
   name: 'BookingPage',
   components: {
     BookList,
-    BookListManager
   },
   mounted() {
     this.userRole = this.get_role();
