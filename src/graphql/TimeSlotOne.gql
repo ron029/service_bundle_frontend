@@ -6,5 +6,7 @@ query time_slot_one ($id: ID!){
     startTime
     endTime
     capacity
+    duration
+    interval
   }
 }

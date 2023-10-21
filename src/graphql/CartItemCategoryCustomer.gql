@@ -1,42 +1,31 @@
+fragment cartItemFields on CartItem {
+  service {
+    name
+    image
+    price
+  }
+  date
+  time
+  status
+}
+
 query cart_item_category {
+  all: cartItemCategory {
+     ...cartItemFields
+  }
 	pending: cartItemCategory(status: 0) {
-    service {
-      name
-    }
-    date
-    time
-    status
+    ...cartItemFields
   }
   paid: cartItemCategory(status: 1) {
-    service {
-      name
-    }
-    date
-    time
-    status
+    ...cartItemFields
   }
   confirmed: cartItemCategory(status: 2) {
-    service {
-      name
-    }
-    date
-    time
-    status
+    ...cartItemFields
   }
   cancelled: cartItemCategory(status: 3) {
-    service {
-      name
-    }
-    date
-    time
-    status
+    ...cartItemFields
   }
-  completed: cartItemCategory(status: 3) {
-    service {
-      name
-    }
-    date
-    time
-    status
+  completed: cartItemCategory(status: 4) {
+    ...cartItemFields
   }
 }

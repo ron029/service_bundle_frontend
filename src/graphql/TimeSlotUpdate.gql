@@ -1,5 +1,5 @@
 mutation update_time_slot($id: ID!, $serviceId: ID!, $startDate: String!, $endDate: String!, $startTime: String!,
-$endTime: String!, $capacity: Int!) {
+$endTime: String!, $capacity: Int!, $duration: Int, $interval: Int) {
   updateTimeSlot(input: {
     id: $id,
     serviceId: $serviceId,
@@ -7,7 +7,9 @@ $endTime: String!, $capacity: Int!) {
     endDate: $endDate,
     startTime: $startTime,
     endTime: $endTime,
-    capacity: $capacity
+    capacity: $capacity,
+    duration: $duration,
+    interval: $interval
   }) {
     errors
     timeSlot {

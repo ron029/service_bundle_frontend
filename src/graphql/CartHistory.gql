@@ -1,0 +1,32 @@
+query cart_history($id: ID) {
+  cartHistory(id: $id) {
+    id
+    firstName
+    lastName
+    cart {
+      status
+    }
+    cartItem {
+      id
+      date
+      time
+      service {
+        id
+        name
+        price
+        serviceCategoryId {
+          id
+          name
+        }
+      }
+    }
+    paymentOption {
+      id
+      name
+    }
+    user {
+      id
+    }
+    status
+  }
+}

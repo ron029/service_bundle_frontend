@@ -1,0 +1,42 @@
+fragment cartItemFields on CartItem {
+  id
+  date
+  time
+  status
+  cart {
+    id
+  }
+  service {
+    name
+    price
+  }
+  user {
+    firstName
+    lastName
+  }
+  cartHistory {
+    firstName
+    lastName
+  }
+}
+
+query admin_cart_item_category {
+  booking: adminCartItemCategory {
+    ...cartItemFields
+  }
+  pending: adminCartItemCategory(status: 0) {
+    ...cartItemFields
+  }
+  paid: adminCartItemCategory(status: 1) {
+    ...cartItemFields
+  }
+  confirmed: adminCartItemCategory(status: 2) {
+    ...cartItemFields
+  }
+  cancelled: adminCartItemCategory(status: 3) {
+    ...cartItemFields
+  }
+  completed: adminCartItemCategory(status: 4) {
+    ...cartItemFields
+  }
+}

@@ -12,6 +12,8 @@ query admin_service {
       endDate
       startTime
       endTime
+      duration
+      interval
     }
     image
     id

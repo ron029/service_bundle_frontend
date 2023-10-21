@@ -3,7 +3,9 @@ query total_registration {
     users {
       firstName,
       role,
-      lastName
+      lastName,
+      email
+      createdAt
     }
     count
   }  

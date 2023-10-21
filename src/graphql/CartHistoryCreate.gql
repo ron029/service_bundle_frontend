@@ -12,6 +12,7 @@ $contactNumber: String!, $email: String!) {
     cartHistory {
       firstName
       lastName
+      id
     }
   }
 }

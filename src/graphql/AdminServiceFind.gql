@@ -11,6 +11,8 @@ query admin_service($id: Int) {
       endDate
       startTime
       endTime
+      duration
+      interval
     }
     id
     price
@@ -19,6 +21,5 @@ query admin_service($id: Int) {
       name
     }
     image
-    # imageData
   }
 }

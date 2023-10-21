@@ -15,6 +15,17 @@ query service_by_category($id: ID!) {
       endDate
       startTime
       endTime
+      duration
+      interval
+      capacity
+    }
+    cartItemTally {
+      date
+      count
+    }
+    cartItem {
+      date
+      time
     }
   }
 }
