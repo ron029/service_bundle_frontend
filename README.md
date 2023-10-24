@@ -10,9 +10,10 @@ Welcome to the Service Bundle Frontend repository! This is the front-end compone
 4. [Installation](#installation)
 5. [Usage](#usage)
 6. [Dependencies](#dependencies)
-7. [Customization](#customization)
-8. [Contributing](#contributing)
-9. [License](#license)
+7. [Service Bundle API](#service-bundle-api)
+8. [Customization](#customization)
+9. [Contributing](#contributing)
+10. [License](#license)
 
 ## Overview
 
@@ -74,6 +75,16 @@ Your Service Bundle Frontend is now running and accessible at `http://localhost:
 - **Vue.js (v2.6.14)**: The JavaScript framework for building the user interface of the front-end.
 
 You can find more details about these dependencies in the project's `package.json`.
+
+## Service Bundle API
+
+The Service Bundle Frontend relies on the Service Bundle API as its backend service. The API is responsible for providing data, authentication, and other functionalities to the front end. Here are the key details of the API:
+
+- **Name**: [Service Bundle API](https://github.com/ron029/service_bundle_api)
+- **Version**: 1
+- **Description**: The Service Bundle API (Version 1) is a powerful backend service that offers a comprehensive set of features for managing services, bookings, and user accounts. It provides secure authentication, efficient data retrieval, and seamless integration with the Service Bundle Frontend.
+
+To set up the entire service-oriented application, make sure you also follow the installation and configuration instructions in the [Service Bundle API README](https://github.com/ron029/service_bundle_api).
 
 ## Customization
 
