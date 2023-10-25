@@ -41,7 +41,7 @@
       </span>
     </div>
     <div class="table-responsive table-container">
-      <table class="table service_category_tbl table-bordered">
+      <table class="table table-bordered">
         <thead>
           <tr>
             <th>No.</th>
@@ -285,6 +285,10 @@ export default {
   height: 80px;
   background-color: #435D7D;
   position: relative;
+}
+
+.table-responsive {
+  margin-top: -20px;
 }
 
 .service_category_title, .service_category_add_btn {

@@ -1,0 +1,31 @@
+query service_find($id: ID!) {
+  service(id: $id) {
+    id
+    name
+    description
+    serviceCategoryId {
+      description
+      name
+    }
+    image
+    price
+    timeSlot {
+      id
+      startDate
+      endDate
+      startTime
+      endTime
+      duration
+      interval
+      capacity
+    }
+    cartItemTally {
+      date
+      count
+    }
+    cartItem {
+      date
+      time
+    }
+  }
+}

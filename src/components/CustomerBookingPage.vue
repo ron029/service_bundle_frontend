@@ -17,11 +17,13 @@
     </div>
     <div class="tab-content" id="myTabContent">
       <!-- Content for each radio button goes here -->
-      <div class="tab-pane fade show active" id="all-tab-pane" role="tabpanel" aria-labelledby="all-tab">
+      <div class="tab-pane fade show active table-responsive" id="all-tab-pane" role="tabpanel" aria-labelledby="all-tab">
         <table class="table table-bordered table-striped table-hover">
           <thead>
             <tr>
               <th>No.</th>
+              <th>Transaction ID</th>
+              <th>Reservation ID</th>
               <th>Service Name</th>
               <th>Date</th>
               <th>Time</th>
@@ -31,6 +33,8 @@
           <tbody v-if="this.all.length > 0">
             <tr v-for="(item, index) in this.all" :key="item.id">
               <td>{{ index + 1 }}</td>
+              <td>{{ convertToNewTransID(item.cart.id) }}</td>
+              <td>{{ convertToNewID(item.id) }}</td>
               <td>{{ item.service.name }}</td>
               <td>{{ formatDate(item.date) }}</td>
               <td>{{ convertTimeToAMPM(item.time) }}</td>
@@ -74,11 +78,13 @@
           </tbody>
         </table>
       </div> -->
-      <div class="tab-pane fade" id="upcoming-tab-pane" role="tabpanel" aria-labelledby="upcoming-tab">
+      <div class="tab-pane fade table-responsive" id="upcoming-tab-pane" role="tabpanel" aria-labelledby="upcoming-tab">
         <table class="table table-bordered table-striped table-hover">
           <thead>
             <tr>
               <th>No.</th>
+              <th>Transaction ID</th>
+              <th>Reservation ID</th>
               <th>Service Name</th>
               <th>Date</th>
               <th>Time</th>
@@ -88,6 +94,8 @@
           <tbody v-if="this.paid.length > 0">
             <tr v-for="(item, index) in this.paid" :key="item.id">
               <td>{{ index + 1 }}</td>
+              <td>{{ convertToNewTransID(item.cart.id) }}</td>
+              <td>{{ convertToNewID(item.id) }}</td>
               <td>{{ item.service.name }}</td>
               <td>{{ formatDate(item.date) }}</td>
               <td>{{ convertTimeToAMPM(item.time) }}</td>
@@ -106,11 +114,13 @@
           </tbody>
         </table>
       </div>
-      <div class="tab-pane fade" id="completed-tab-pane" role="tabpanel" aria-labelledby="completed-tab">
+      <div class="tab-pane fade table-responsive" id="completed-tab-pane" role="tabpanel" aria-labelledby="completed-tab">
         <table class="table table-bordered table-striped table-hover">
           <thead>
             <tr>
               <th>No.</th>
+              <th>Transaction ID</th>
+              <th>Reservation ID</th>
               <th>Service Name</th>
               <th>Date</th>
               <th>Time</th>
@@ -120,6 +130,8 @@
           <tbody v-if="this.completed.length > 0">
             <tr v-for="(item, index) in this.completed" :key="item.id">
               <td>{{ index + 1 }}</td>
+              <td>{{ convertToNewTransID(item.cart.id) }}</td>
+              <td>{{ convertToNewID(item.id) }}</td>
               <td>{{ item.service.name }}</td>
               <td>{{ formatDate(item.date) }}</td>
               <td>{{ convertTimeToAMPM(item.time) }}</td>
@@ -138,11 +150,13 @@
           </tbody>
         </table>
       </div>
-      <div class="tab-pane fade" id="cancelled-tab-pane" role="tabpanel" aria-labelledby="cancelled-tab">
+      <div class="tab-pane fade table-responsive" id="cancelled-tab-pane" role="tabpanel" aria-labelledby="cancelled-tab">
         <table class="table table-bordered table-striped table-hover">
           <thead>
             <tr>
               <th>No.</th>
+              <th>Transaction ID</th>
+              <th>Reservation ID</th>
               <th>Service Name</th>
               <th>Date</th>
               <th>Time</th>
@@ -152,6 +166,8 @@
           <tbody v-if="this.cancelled.length > 0">
             <tr v-for="(item, index) in this.cancelled" :key="item.id">
               <td>{{ index + 1 }}</td>
+              <td>{{ convertToNewTransID(item.cart.id) }}</td>
+              <td>{{ convertToNewID(item.id) }}</td>
               <td>{{ item.service.name }}</td>
               <td>{{ formatDate(item.date) }}</td>
               <td>{{ convertTimeToAMPM(item.time) }}</td>
@@ -175,6 +191,8 @@
           <thead>
             <tr>
               <th>No.</th>
+              <th>Transaction ID</th>
+              <th>Reservation ID</th>
               <th>Service Name</th>
               <th>Date</th>
               <th>Time</th>
@@ -184,6 +202,8 @@
           <tbody v-if="this.completed.length > 0">
             <tr v-for="(item, index) in this.completed" :key="item.id">
               <td>{{ index + 1 }}</td>
+              <td>{{ convertToNewTransID(item.cart.id) }}</td>
+              <td>{{ convertToNewID(item.id) }}</td>
               <td>{{ item.service.name }}</td>
               <td>{{ formatDate(item.date) }}</td>
               <td>{{ convertTimeToAMPM(item.time) }}</td>
@@ -220,6 +240,16 @@ export default {
     }
   },
   methods: {
+    convertToNewTransID(id) {
+      const prefix = '938'; // The common prefix for the new IDs
+      const newID = prefix + id.toString().padStart(3, '0');
+      return newID;
+    },
+    convertToNewID(id) {
+      const prefix = '12321000'; // The common prefix for the new IDs
+      const newID = prefix + id.toString().padStart(5, '0');
+      return newID;
+    },
     formatDate(inputDate) {
       const options = { year: 'numeric', month: 'long', day: 'numeric' };
       return new Date(inputDate).toLocaleDateString(undefined, options);
@@ -255,6 +285,15 @@ export default {
         });
         console.log(response)
         this.all = response.data.all;
+        let all_pending = this.all;
+
+        for (let i = 0; i < all_pending.length; i++) {
+          if (all_pending[i].status === "pending") {
+            all_pending.splice(i, 1);
+            i--; // Decrement i to account for the removed element
+          }
+        }
+
         this.pending = response.data.pending;
         this.paid = response.data.paid;
         this.confirmed = response.data.confirmed;

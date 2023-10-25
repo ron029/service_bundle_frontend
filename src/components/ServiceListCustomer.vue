@@ -21,9 +21,9 @@
     </div>
     <div class="row service_list_customer">
       <div class="col-md-6 service_list_customer_services">
-        <div v-for="(item,index) in service_by_category" :key="index" class="">
+        <div v-for="(item,index) in service_by_category" :key="index">
           <div class="card service_box">
-            <div class="row card-body service_item" @click="showService(item)">
+            <div class="row card-body service_item" @mouseenter="showService(item)">
               <!-- <a class="service_link" :href="generate_service_link(item.id)"> -->
               <h5>{{ item.name }}</h5>
               <div class="col-md-4">
@@ -51,10 +51,11 @@
       <div class="col-md-6 hidden-sm hidden-xs service_list_customer_timeslot">
         <div class="offcanvas_timeslot_info">
           <h1 v-if="displayService != ''">{{ displayService }}</h1>
-          <form @submit.prevent="submitForm">
+          <h1 v-else>{{ service_by_category[0].name }}</h1>
+          <form @submit.prevent="submitForm" class="form-slot-picker">
             <div v-if="open_time == false">
               <p>Duration: {{ duration }}</p>
-              <p>Available Slot: {{ slot }}</p>  
+              <p>Available Slot: {{ slot }}</p>
               <div v-if="time == '' && available_timeslot.length > 0">
                 <p>Available timeslot:</p>
                 <div class="scrollable-container">
@@ -79,13 +80,15 @@
                 <p v-else>Select a date for your appointment.</p>
               </div>
               <div v-else>
-                <p @click.prevent="changeTime">Selected Time: {{ time }}</p>
+                <p v-if="time != ''" @click.prevent="changeTime">Selected Time: {{ time }}</p>
               </div>
             </div>
             <div v-else>
+              <p>Available Slot: {{ slot > 50 ? 50 : slot }}</p>
+              <p v-if="minTime != '' && maxTime != ''">Select time from {{ minTime }} to {{ maxTime }}</p>
               <vue2-timepicker 
                 v-model="time"
-                :hour-range="[[startHour(),endHour()]]"
+                :hour-range="[[startHour(), endHour()]]"
                 lazy
                 hide-clear-button
                 @change="onTimeSelected()"
@@ -166,6 +169,11 @@ export default {
   },
   methods: {
     showService(item) {
+      console.log('showService')
+      this.available_timeslot = 0
+      this.time = ''
+      this.maxTime = ''
+      this.minTime = ''
       this.displayService = item.name
       history.pushState(
         {},
@@ -221,6 +229,7 @@ export default {
       setTimeout(() => this.err_notif = false, 10000);
     },
     onTimeSelected() {
+      if (this.time > this.maxTime) this.time = this.maxTime;
       this.time = this.convertTo12HourFormat(this.time);
     },
     changeTime() { this.time = '' },
@@ -300,6 +309,15 @@ export default {
       this.minTime = range.startTime;
       this.maxTime = range.endTime;
       this.duration = range.duration;
+      console.log('SELECTED DATE: ', params)
+
+      let booked_counter = 0;
+      for (let i=0; i<item.cartItem.length; i++) {
+        if(this.timestampTodate(params) == item.cartItem[i].date) booked_counter++;
+      }
+      this.slot = range.capacity - booked_counter;
+      console.log('remaining slot for date: ',this.timestampTodate(params), ' is: ', this.slot)
+
       console.log('range: ',range);
       if (range.duration !== null) {
         this.open_time = false;
@@ -388,6 +406,7 @@ export default {
           // Format the date object
           const timeString = formatter.format(dateObject);
           new_timeslot = availableTimeSlots.filter(item => item.value !== timeString);
+
         }
       }
       console.log('available timeslot: ', availableTimeSlots);      
@@ -501,6 +520,7 @@ export default {
     disable_date_by_slot_func() {
       // console.log('DISABLE DATE BY SLOT FUNC ')
       const service_category = this.service_by_category;
+      console.log('service_by_category: ',service_category);
       let disable_date_by_slot = [];
 
       for (let i = 0; i < service_category.length; i++) {
@@ -559,12 +579,12 @@ export default {
     },
     timeslot_info_event() {
       document.addEventListener('DOMContentLoaded', function() {
-      const offcanvas = document.querySelector('.offcanvas_timeslot_info');
-      const toggleButton = document.getElementById('toggleButton');
+      // const offcanvas = document.querySelector('.offcanvas_timeslot_info');
+      // const toggleButton = document.getElementById('toggleButton');
 
-      toggleButton.addEventListener('click', function() {
-        offcanvas.classList.toggle('active');
-      });
+      // toggleButton.addEventListener('click', function() {
+      //   offcanvas.classList.toggle('active');
+      // });
 });
     }
   },
@@ -603,10 +623,8 @@ h5 {
 .service_list_customer_timeslot {
   position: sticky;
   top: 0; /* Stick to the top of the parent container */ /* Occupy the full viewport height */
-  height: 100vh;
+  height: 95vh;
 }
-
-
 
 .test_customer_service {
   display: inline-block;
@@ -658,6 +676,10 @@ h5 {
   border-radius: 5px 5px 0 0;
   max-width: 100%; /* Ensure the image scales down proportionally */    /* Maintain the aspect ratio */
   width: 100%;    /* Set a maximum width if needed */
+}
+
+.form-slot-picker {
+  min-height: 300px;
 }
 
 .scrollable-list {

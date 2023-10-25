@@ -10,27 +10,27 @@
       </span>
     </div>
     <table class="table table-bordered table-hover table-striped">
-          <thead>
-            <tr>
-              <th>No.</th>
-              <th>First Name</th>
-              <th>Last Name</th>
-              <th>Email</th>
-              <th>Role</th>
-              <th>Joined</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="(item, index) in this.registered" :key="index">
-              <td>{{ index + 1 }}</td>
-              <td>{{ item.firstName }}</td>
-              <td>{{ item.lastName }}</td>
-              <td>{{ item.email }}</td>
-              <td>{{ item.role }}</td>
-              <td>{{ formatTimestamp(item.createdAt) }}</td>
-            </tr>
-          </tbody>
-        </table>
+      <thead>
+        <tr>
+          <th>No.</th>
+          <th>First Name</th>
+          <th>Last Name</th>
+          <th>Email</th>
+          <th>Role</th>
+          <th>Joined</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="(item, index) in this.registered" :key="index">
+          <td>{{ index + 1 }}</td>
+          <td>{{ item.firstName }}</td>
+          <td>{{ item.lastName }}</td>
+          <td>{{ item.email }}</td>
+          <td>{{ item.role }}</td>
+          <td>{{ formatTimestamp(item.createdAt) }}</td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </template>
 
@@ -67,17 +67,17 @@ export default {
       }
     },
     async cart_item_category() {
-    try {
-      const response = await this.$apollo.query({
-        query: require('@/graphql/TotalRegistration.gql'),
-      });
-      console.log(response)
-      this.registered = response.data.totalRegistration.users
-      this.count = response.data.totalRegistration.count
-    } catch (error) { 
-      console.error('Error creating like:', error);
-    }
-  },
+      try {
+        const response = await this.$apollo.query({
+          query: require('@/graphql/TotalRegistration.gql'),
+        });
+        console.log(response)
+        this.registered = response.data.totalRegistration.users
+        this.count = response.data.totalRegistration.count
+      } catch (error) { 
+        console.error('Error creating like:', error);
+      }
+    },
   },
  
   mounted() {

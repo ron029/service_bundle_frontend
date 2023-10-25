@@ -4,6 +4,10 @@ fragment cartItemFields on CartItem {
     image
     price
   }
+  id
+  cart {
+    id
+  }
   date
   time
   status

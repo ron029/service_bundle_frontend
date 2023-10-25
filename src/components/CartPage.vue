@@ -31,13 +31,21 @@
                 </h2>
               </a>
             </div>
+            <div v-if="cart_item_deleted == true">
+              <p class="alert alert-success">Item has been deleted.</p>
+            </div>
             <div v-if="cart_content.length > 0">
-              <div v-for="(item, index) in cart_content" :key="index" class="row cart-item">
+              <div v-for="(item, index) in cart_content" :key="index" class="row cart-item" @mouseover="show_option(index)" @mouseout.once="hide_option(index)">
                 <div class="col-md-4">
                   <img :src="item.service.image" :alt="item.service.name" style="width: 150px; height: 150px;">
                 </div>
                 <div class="col-md-8">
                   <ul class="cart-item-info">
+                    <div v-if="trash == index" @click.prevent="delete_cart_item(index, item)" class="cart-item-trash btn btn-outline-danger">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3-fill" viewBox="0 0 16 16">
+                        <path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5Zm-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5ZM4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06Zm6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528ZM8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5Z"/>
+                      </svg>
+                    </div>
                     <li>Service Name: {{ item.service.name }}</li>
                     <li>
                       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calendar3" viewBox="0 0 16 16">
@@ -203,6 +211,7 @@
 <script>
 import { useVuelidate } from '@vuelidate/core';
 import { required, email, helpers, numeric, } from '@vuelidate/validators';
+import { gql } from '@apollo/client';
 const fields = {
     page1: [],
     page2: ['first_name', 'last_name', 'contact_number', 'email', 'payment_option', 'terms'],
@@ -229,6 +238,8 @@ export default {
       steps: {},
       step: 1,
       hasSeenCongrats: false,
+      trash: false,
+      cart_item_deleted: false,
     }
   },
   validations () {
@@ -251,6 +262,38 @@ export default {
     }
   },
   methods: {
+    async delete_cart_item(index, item) {
+      const userConfirmed = window.confirm("Do you really want to delete this item? " + item.service.name);
+      if (userConfirmed) {
+        const response = await this.$apollo.mutate({
+          mutation: gql`mutation delete_cart_item($id: ID!) {
+            deleteCartItem(input: {id: $id}) {
+              cartItem {
+                id
+              }
+            }
+          }
+          `,
+          variables: {
+            id: item.id
+          },
+        });
+        console.log('resonse from delete_cart_item: ', response)
+        if (response.data.cartItem == null) {
+          this.cart_item_deleted = true;
+          setTimeout(() => {
+            this.cart_item_deleted = false;
+          }, 5000)
+          this.cart_content.splice(index, 1);
+        }
+      }
+    },
+    hide_option() {
+      this.trash = null;
+    },
+    show_option(index) {
+      this.trash = index;
+    },
     formatToPHP(number) {
       // Convert the number to a string with two decimal places
       const formattedNumber = Number(number).toFixed(2);
@@ -304,8 +347,21 @@ export default {
     async cart_items() {
       try {
         const response = await this.$apollo.query({
-          query: require('@/graphql/CartItemCategoryCustomer.gql'),
-        });
+          query: gql`query cart_item_category {
+                pending: cartItemCategory(status: 0) {
+                  service {
+                    name
+                    image
+                    price
+                  }
+                  date
+                  time
+                  status
+                  id
+                }
+              }
+            `,
+          });
         this.cart_content = response.data.pending;
         for (let i = 0; i < this.cart_content.length; i++) {
           if (this.cart_content[i].service.price > 0) { // Check if the subarray is not empty
@@ -413,9 +469,16 @@ export default {
 }
 
 .cart-item-info {
+  position: relative;
   text-align: left;
   line-height: 35px;
   list-style-type: none;
+}
+
+.cart-item-trash {
+  position: absolute;
+  right: 10px;
+  top: 0;
 }
 
 .header-checkout {
@@ -483,9 +546,8 @@ export default {
   background-color: #0056b3; /* Darker shade of primary color */
 }
 
-/* Style the table */
-.table-container {
-  margin-top: 20px; /* Add spacing between form and table */
+.table {
+  margin-top: 20px;
 }
 
 /* Style table headers */
