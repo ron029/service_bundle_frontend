@@ -15,8 +15,8 @@
                                 </div>
                             </div>
                             <div class="col-sm-6 err-card">
-                                <input v-model="first_name" class="form-control form-control-l" :class="{ error: v$.first_name.$errors.length }" id="first_name">
-                                <div class="input-errors" v-for="error of v$.first_name.$errors" :key="error.$uid" placeholder="Enter your first name" autofocus>
+                                <input v-model="first_name" class="form-control form-control-l" :class="{ error: v$.first_name.$errors.length }" id="first_name" autofocus>
+                                <div class="input-errors" v-for="error of v$.first_name.$errors" :key="error.$uid">
                                     <div class="error-msg">{{ error.$message }}</div>
                                 </div>
                             </div>
@@ -30,7 +30,7 @@
                             </div>
                             <div class="col-sm-6 err-card">
                                 <input v-model="last_name" class="form-control form-control-l" :class="{ error: v$.last_name.$errors.length }" id="last_name">
-                                <div class="input-errors" v-for="error of v$.last_name.$errors" :key="error.$uid" placeholder="Enter your last name" autofocus>
+                                <div class="input-errors" v-for="error of v$.last_name.$errors" :key="error.$uid">
                                     <div class="error-msg">{{ error.$message }}</div>
                                 </div>
                             </div>
@@ -44,7 +44,7 @@
                             </div>
                             <div class="col-sm-6 err-card">
                                 <input v-model="email" class="form-control form-control-l" :class="{ error: v$.email.$errors.length }" id="email">
-                                <div class="input-errors" v-for="error of v$.email.$errors" :key="error.$uid" placeholder="Enter your Email">
+                                <div class="input-errors" v-for="error of v$.email.$errors" :key="error.$uid">
                                     <div class="error-msg">{{ error.$message }}</div>
                                 </div>
                             </div>
@@ -58,7 +58,7 @@
                             </div>
                             <div class="col-sm-6 err-card">
                                 <input v-model="mobile_number" class="form-control form-control-l" :class="{ error: v$.mobile_number.$errors.length }" id="mobile_number">
-                                <div class="input-errors" v-for="error of v$.mobile_number.$errors" :key="error.$uid" placeholder="Enter your mobile number">
+                                <div class="input-errors" v-for="error of v$.mobile_number.$errors" :key="error.$uid">
                                     <div class="error-msg">{{ error.$message }}</div>
                                 </div>
                             </div>
@@ -72,7 +72,7 @@
                             </div>
                             <div class="col-sm-6 err-card">
                                 <input v-model="password" class="form-control form-control-l" :class="{ error: v$.password.$errors.length }" id="password" type="password">
-                                <div class="input-errors" v-for="error of v$.password.$errors" :key="error.$uid" placeholder="Enter your Password">
+                                <div class="input-errors" v-for="error of v$.password.$errors" :key="error.$uid">
                                     <div class="error-msg">{{ error.$message }}</div>
                                 </div>
                             </div>
@@ -86,17 +86,17 @@
                             </div>
                             <div class="col-sm-6 err-card">
                                 <input v-model="password_confirmation" class="form-control form-control-l" :class="{ error: v$.password_confirmation.$errors.length }" id="password_confirmation" type="password">
-                                <div class="input-errors" v-for="error of v$.password_confirmation.$errors" :key="error.$uid" placeholder="Enter your Password Confirmation">
+                                <div class="input-errors" v-for="error of v$.password_confirmation.$errors" :key="error.$uid">
                                     <div class="error-msg">{{ error.$message }}</div>
                                 </div>
                             </div>
                         </div>
                         <div class="text-right mt-4">
                             <button type="submit" class="btn btn-primary btn-lg input-field-signup" style="padding-left: 2.5rem; padding-right: 2.5rem;">Sign up</button>
-                            <p class=" input-field-signup">Already have an account?
+                            <!-- <p class=" input-field-signup">Already have an account? -->
                                 <!-- <%= link_to 'Login', login_path, class: 'link-primary'%> -->
-                                <a href="#">Login</a>
-                            </p>
+                                <!-- <a href="#">Login</a>
+                            </p> -->
                         </div>
                     </form>
                 </div>
