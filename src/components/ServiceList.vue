@@ -28,7 +28,7 @@
             <td>{{ index + 1 }}</td>
             <td>{{ item.name }}</td>
             <td>{{ item.serviceCategoryId.name }}</td>
-            <td class="no-wrap">PHP {{ item.price.toFixed(2) }}</td>
+            <td class="no-wrap">PHP {{ parseInt(item.price).toFixed(2) }}</td>
             <td>{{ item.description }}</td>
             <td>
               <template>
@@ -72,7 +72,7 @@ export default {
       modalId: 'customModal',
     };
   },
-  components: { 
+  components: {
     Datepicker,
   },
   props: {
