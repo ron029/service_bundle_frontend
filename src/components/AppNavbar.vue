@@ -177,8 +177,12 @@ export default {
         },
     },
     mounted(){
-        console.log('the role in navbar is now', this.get_role())
-        console.log('the role is now', this.userRole)
+        console.log("Please note that there is a server boot-up time of 3 - 5 minutes.");
+        console.log("Additionally, the server is set to automatically shut down every 10 minutes if there is no activity.");
+        console.log("These policies are in effect for the free tier of our web hosting service, which you can find more information about at https://render.com/docs/free. ");
+        console.log("We appreciate your patience as we work to provide you with the best service.");
+        // console.log('the role in navbar is now', this.get_role())
+        // console.log('the role is now', this.userRole)
     }
 }
 </script>
