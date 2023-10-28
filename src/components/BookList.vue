@@ -354,7 +354,6 @@ export default {
     this.admin_cart_item_count_service();
   }
 }
-console.log('asdf')
 </script>
 
 <style>
